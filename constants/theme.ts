@@ -1,53 +1,76 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
-import { Platform } from 'react-native';
-
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+import { Platform } from "react-native";
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    background: "hsl(204.0, 12.2%, 92.0%)",
+    foreground: "hsl(0, 0%, 20%)",
+    card: "hsl(0, 0%, 100%)",
+    cardForeground: "hsl(0, 0%, 20%)",
+    popover: "hsl(0, 0%, 100%)",
+    popoverForeground: "hsl(0, 0%, 20%)",
+    primary: "hsl(13.2, 73.0%, 54.9%)",
+    primaryForeground: "hsl(0, 0%, 100%)",
+    secondary: "hsl(220.0, 14.3%, 95.9%)",
+    secondaryForeground: "hsl(215, 13.8%, 34.1%)",
+    muted: "hsl(210, 20.0%, 98.0%)",
+    mutedForeground: "hsl(220, 8.9%, 46.1%)",
+    accent: "hsl(207.7, 46.4%, 89.0%)",
+    accentForeground: "hsl(224.4, 64.3%, 32.9%)",
+    destructive: "hsl(0, 84.2%, 60.2%)",
+    destructiveForeground: "hsl(0, 0%, 100%)",
+    border: "hsl(210, 9.4%, 87.5%)",
+    input: "hsl(220, 15.8%, 96.3%)",
+    ring: "hsl(13.2, 73.0%, 54.9%)",
+
+    text: "hsl(0, 0%, 20%)",
+    tint: "hsl(13.2, 73.0%, 54.9%)",
+    icon: "hsl(220, 8.9%, 46.1%)",
+    tabIconDefault: "hsl(220, 8.9%, 46.1%)",
+    tabIconSelected: "hsl(13.2, 73.0%, 54.9%)",
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    background: "hsl(219.1, 29.1%, 15.5%)",
+    foreground: "hsl(0, 0%, 89.8%)",
+    card: "hsl(223.6, 20.8%, 20.8%)",
+    cardForeground: "hsl(0, 0%, 89.8%)",
+    popover: "hsl(223.3, 19.1%, 18.4%)",
+    popoverForeground: "hsl(0, 0%, 89.8%)",
+    primary: "hsl(13.2, 73.0%, 54.9%)",
+    primaryForeground: "hsl(0, 0%, 100%)",
+    secondary: "hsl(222, 19.2%, 20.4%)",
+    secondaryForeground: "hsl(0, 0%, 89.8%)",
+    muted: "hsl(222, 19.2%, 20.4%)",
+    mutedForeground: "hsl(0, 0%, 63.9%)",
+    accent: "hsl(223.6, 34.4%, 25.1%)",
+    accentForeground: "hsl(213.3, 96.9%, 87.3%)",
+    destructive: "hsl(0, 84.2%, 60.2%)",
+    destructiveForeground: "hsl(0, 0%, 100%)",
+    border: "hsl(224.3, 15.9%, 28.4%)",
+    input: "hsl(224.3, 15.9%, 28.4%)",
+    ring: "hsl(13.2, 73.0%, 54.9%)",
+
+    text: "hsl(0, 0%, 89.8%)",
+    tint: "hsl(13.2, 73.0%, 54.9%)",
+    icon: "hsl(0, 0%, 63.9%)",
+    tabIconDefault: "hsl(0, 0%, 63.9%)",
+    tabIconSelected: "hsl(13.2, 73.0%, 54.9%)",
   },
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
-    serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
-    mono: 'ui-monospace',
+    sans: "Inter",
+    serif: "Source Serif 4",
+    mono: "JetBrains Mono",
   },
   default: {
-    sans: 'normal',
-    serif: 'serif',
-    rounded: 'normal',
-    mono: 'monospace',
+    sans: "Inter",
+    serif: "Source Serif 4",
+    mono: "JetBrains Mono",
   },
   web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-    serif: "Georgia, 'Times New Roman', serif",
-    rounded: "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",
-    mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
+    sans: "Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    serif: "'Source Serif 4', Georgia, 'Times New Roman', serif",
+    mono: "'JetBrains Mono', monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
   },
 });

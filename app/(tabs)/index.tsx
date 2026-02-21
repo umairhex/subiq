@@ -1,98 +1,296 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ExpenseSummary } from "@/components/dashboard/expense-summary";
+import {
+  Recommendation,
+  RecommendationEngine,
+} from "@/components/dashboard/recommendation-engine";
+import {
+  Subscription,
+  SubscriptionCard,
+} from "@/components/dashboard/subscription-card";
+import { ThemedText } from "@/components/themed-text";
+import { Colors } from "@/constants/theme";
+import { useThemeStore } from "@/stores/theme-store";
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const MOCK_SUBSCRIPTIONS: Subscription[] = [
+  {
+    id: "1",
+    name: "Netflix",
+    startDate: "2023-01-15",
+    renewalDate: "Mar 15, 2024",
+    billingCycle: "Monthly",
+    price: 15.99,
+    paymentMethod: "Visa **** 4242",
+    status: "Active",
+    daysLeft: 12,
+    icon: "play-circle",
+  },
+  {
+    id: "2",
+    name: "Spotify Premium",
+    startDate: "2023-06-20",
+    renewalDate: "Mar 20, 2024",
+    billingCycle: "Monthly",
+    price: 10.99,
+    paymentMethod: "Mastercard **** 8888",
+    status: "Active",
+    daysLeft: 17,
+    icon: "musical-notes",
+  },
+  {
+    id: "3",
+    name: "Adobe Creative Cloud",
+    startDate: "2024-01-01",
+    renewalDate: "Jan 01, 2025",
+    billingCycle: "Yearly",
+    price: 599.99,
+    paymentMethod: "Apple Pay",
+    status: "Active",
+    daysLeft: 290,
+    icon: "brush",
+  },
+];
 
-export default function HomeScreen() {
+const MOCK_RECOMMENDATIONS: Recommendation[] = [
+  {
+    id: "1",
+    type: "Duplicate",
+    title: "Overlapping Streaming Content",
+    description:
+      "You have Netflix and HBO Max. 65% of trending content overlaps between these services.",
+    savings: 14.99,
+    confidence: 92,
+  },
+  {
+    id: "2",
+    type: "Inactive",
+    title: "Unused Software License",
+    description:
+      "Adobe Illustrator hasn't been opened in 45 days. Consider downgrading your plan.",
+    savings: 32.0,
+    confidence: 88,
+  },
+];
+
+export default function DashboardScreen() {
+  const colorScheme = useColorScheme() ?? "light";
+  const { theme: overrideTheme } = useThemeStore();
+  const effectiveColorScheme =
+    overrideTheme === "system" ? colorScheme : overrideTheme;
+  const theme = Colors[effectiveColorScheme];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.background }}
+      edges={["top"]}
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.userHeader}>
+          <View>
+            <ThemedText
+              type="default"
+              style={[styles.greeting, { color: theme.mutedForeground }]}
+            >
+              Good morning,
+            </ThemedText>
+            <ThemedText
+              type="title"
+              style={[styles.userName, { color: theme.foreground }]}
+            >
+              John Doe
+            </ThemedText>
+          </View>
+          <Pressable
+            style={[styles.notificationBtn, { backgroundColor: theme.input }]}
+          >
+            <Ionicons
+              name="notifications-outline"
+              size={24}
+              color={theme.foreground}
             />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+            <View
+              style={[
+                styles.notificationDot,
+                { backgroundColor: theme.primary },
+              ]}
+            />
+          </Pressable>
+        </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <ExpenseSummary
+          totalMonthly={76.97}
+          totalYearly={923.64}
+          trendPercentage={-4.2}
+          theme={theme}
+        />
+
+        <RecommendationEngine
+          recommendations={MOCK_RECOMMENDATIONS}
+          theme={theme}
+        />
+
+        <View style={styles.sectionHeader}>
+          <ThemedText
+            type="subtitle"
+            style={[styles.sectionTitle, { color: theme.foreground }]}
+          >
+            Subscription Logs
+          </ThemedText>
+          <Pressable>
+            <ThemedText
+              type="link"
+              style={[styles.seeAll, { color: theme.primary }]}
+            >
+              See All
+            </ThemedText>
+          </Pressable>
+        </View>
+
+        <View style={styles.sortBar}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.sortScroll}
+          >
+            {["All", "Price", "Renewal Date", "Recently Added"].map(
+              (label, idx) => (
+                <Pressable
+                  key={label}
+                  style={[
+                    styles.sortChip,
+                    {
+                      backgroundColor: idx === 0 ? theme.primary : theme.input,
+                    },
+                  ]}
+                >
+                  <ThemedText
+                    type="default"
+                    style={[
+                      styles.sortChipText,
+                      {
+                        color:
+                          idx === 0
+                            ? theme.primaryForeground
+                            : theme.mutedForeground,
+                      },
+                    ]}
+                  >
+                    {label}
+                  </ThemedText>
+                </Pressable>
+              ),
+            )}
+          </ScrollView>
+        </View>
+
+        <View style={styles.subscriptionList}>
+          {MOCK_SUBSCRIPTIONS.map((sub) => (
+            <SubscriptionCard key={sub.id} subscription={sub} theme={theme} />
+          ))}
+        </View>
+      </ScrollView>
+
+      <Pressable
+        style={[
+          styles.fab,
+          { backgroundColor: theme.primary, shadowColor: theme.primary },
+        ]}
+      >
+        <Ionicons name="add" size={32} color={theme.primaryForeground} />
+      </Pressable>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  contentContainer: {
+    paddingHorizontal: 24,
+    paddingBottom: 100,
+  },
+  userHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 24,
+  },
+  greeting: {
+    fontSize: 14,
+  },
+  userName: {
+    fontSize: 24,
+  },
+  notificationBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
+  },
+  notificationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    position: "absolute",
+    top: 12,
+    right: 12,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
+  },
+  seeAll: {
+    fontSize: 14,
+  },
+  sortBar: {
+    marginBottom: 20,
+  },
+  sortScroll: {
     gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  sortChip: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  sortChipText: {
+    fontSize: 13,
+  },
+  subscriptionList: {
+    gap: 16,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 8,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
   },
 });
