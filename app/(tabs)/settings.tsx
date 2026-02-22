@@ -2,6 +2,9 @@ import { CurrencySelector } from '@/components/settings/currency-selector';
 import { SettingsItem } from '@/components/settings/settings-item';
 import { ThemedText } from '@/components/themed-text';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAuth } from '@/hooks/use-auth';
+import { useProfile } from '@/hooks/use-profile';
+import { useAuthStore } from '@/stores/auth-store';
 import { useCurrencyStore } from '@/stores/currency-store';
 import { useThemeStore } from '@/stores/theme-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,8 +18,16 @@ export default function SettingsScreen() {
   const { theme } = useAppTheme();
   const { theme: overrideTheme, setTheme } = useThemeStore();
   const { currency } = useCurrencyStore();
+  const { signOut } = useAuth();
+  const user = useAuthStore((s) => s.user);
+  const { data: profile } = useProfile();
 
   const [showCurrencySelector, setShowCurrencySelector] = useState(false);
+
+  const displayName =
+    [profile?.first_name, profile?.last_name].filter(Boolean).join(' ') ||
+    'User';
+  const displayEmail = user?.email ?? '';
 
   const toggleTheme = async () => {
     const newMode =
@@ -27,6 +38,7 @@ export default function SettingsScreen() {
           : 'light';
     setTheme(newMode);
   };
+
   const getThemeSubtitle = () => {
     switch (overrideTheme) {
       case 'light':
@@ -53,8 +65,8 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleLogout = () => {
-    router.replace('/');
+  const handleLogout = async () => {
+    await signOut();
   };
 
   return (
@@ -106,7 +118,7 @@ export default function SettingsScreen() {
                     type="title"
                     style={[styles.profileName, { color: theme.foreground }]}
                   >
-                    John Doe
+                    {displayName}
                   </ThemedText>
                   <ThemedText
                     type="default"
@@ -115,7 +127,7 @@ export default function SettingsScreen() {
                       { color: theme.mutedForeground },
                     ]}
                   >
-                    john.doe@example.com
+                    {displayEmail}
                   </ThemedText>
                 </View>
               </View>

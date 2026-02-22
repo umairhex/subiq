@@ -2,12 +2,20 @@ import { ActivityLogItem } from '@/components/activity/activity-log-item';
 import { ThemedText } from '@/components/themed-text';
 import { AddActivityModal } from '@/components/ui/add-activity-modal';
 import { StatsCard } from '@/components/ui/stats-card';
-import { MOCK_ACTIVITY } from '@/constants/mock-data';
+import { useActivities, useCreateActivity } from '@/hooks/use-activities';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useSubscriptions } from '@/hooks/use-subscriptions';
 import { useCurrencyStore } from '@/stores/currency-store';
+import { toActivity } from '@/utils/transforms';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ActivityScreen() {
@@ -16,13 +24,71 @@ export default function ActivityScreen() {
 
   const [showAddModal, setShowAddModal] = React.useState(false);
 
-  const handleAddActivity = (activity: {
+  const { data: activities, isLoading } = useActivities();
+  const { data: subscriptions } = useSubscriptions();
+  const createActivity = useCreateActivity();
+
+  const mapped = useMemo(
+    () => (activities ?? []).map(toActivity),
+    [activities]
+  );
+
+  const stats = useMemo(() => {
+    const platformCounts: Record<string, number> = {};
+    let totalHours = 0;
+
+    for (const a of mapped) {
+      platformCounts[a.platform] = (platformCounts[a.platform] ?? 0) + 1;
+      if (a.duration) {
+        const hours = parseFloat(a.duration);
+        if (!isNaN(hours)) totalHours += hours;
+      }
+    }
+
+    const mostUsed = Object.entries(platformCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0];
+    return {
+      mostUsed: mostUsed?.[0] ?? 'N/A',
+      totalHours: totalHours.toFixed(1),
+    };
+  }, [mapped]);
+
+  const costInsight = useMemo(() => {
+    if (!subscriptions || subscriptions.length === 0 || mapped.length === 0) {
+      return { platform: 'N/A', costPerUse: 0, monthlySpend: 0 };
+    }
+    const platform = stats.mostUsed;
+    const sub = subscriptions.find(
+      (s) => s.name.toLowerCase() === platform.toLowerCase()
+    );
+    const monthlyPrice = sub
+      ? sub.billing_cycle === 'Yearly'
+        ? sub.price / 12
+        : sub.price
+      : 0;
+    const uses = mapped.filter(
+      (a) => a.platform.toLowerCase() === platform.toLowerCase()
+    ).length;
+    return {
+      platform,
+      costPerUse: uses > 0 ? monthlyPrice / uses : 0,
+      monthlySpend: monthlyPrice,
+    };
+  }, [subscriptions, mapped, stats.mostUsed]);
+
+  const handleAddActivity = async (activity: {
     platform: string;
     activityName: string;
     duration: string;
   }): Promise<void> => {
     console.log('LOG: Adding activity:', activity);
-    return new Promise<void>((resolve) => setTimeout(resolve, 1000));
+    await createActivity.mutateAsync({
+      platform: activity.platform,
+      activity_name: activity.activityName,
+      duration: activity.duration || null,
+    });
+    setShowAddModal(false);
   };
 
   return (
@@ -61,14 +127,16 @@ export default function ActivityScreen() {
           items={[
             {
               label: 'Most Used',
-              value: 'Netflix',
-              trend: '+12% this week',
+              value: stats.mostUsed,
+              trend:
+                mapped.length > 0
+                  ? `${mapped.length} activities logged`
+                  : undefined,
               trendColor: theme.primary,
             },
             {
               label: 'Total Time',
-              value: '24.5h',
-              trend: 'vs 22h last week',
+              value: `${stats.totalHours}h`,
             },
           ]}
         />
@@ -93,8 +161,9 @@ export default function ActivityScreen() {
                 { color: theme.mutedForeground },
               ]}
             >
-              Your cost-per-watch for Netflix is {currency.symbol}1.20.
-              You&apos;re getting great value!
+              {costInsight.costPerUse > 0
+                ? `Your cost-per-use for ${costInsight.platform} is ${currency.symbol}${costInsight.costPerUse.toFixed(2)}. ${costInsight.costPerUse < 2 ? "You're getting great value!" : 'Consider your usage.'}`
+                : 'Log more activities to see cost-per-use insights.'}
             </ThemedText>
           </View>
 
@@ -110,7 +179,8 @@ export default function ActivityScreen() {
                 type="title"
                 style={[styles.metricValue, { color: theme.foreground }]}
               >
-                {currency.symbol}24.50
+                {currency.symbol}
+                {costInsight.monthlySpend.toFixed(2)}
               </ThemedText>
             </View>
 
@@ -123,13 +193,14 @@ export default function ActivityScreen() {
                 type="default"
                 style={[styles.metricLabel, { color: theme.mutedForeground }]}
               >
-                Avg. per Watch
+                Avg. per Use
               </ThemedText>
               <ThemedText
                 type="title"
                 style={[styles.metricValue, { color: theme.foreground }]}
               >
-                {currency.symbol}1.20
+                {currency.symbol}
+                {costInsight.costPerUse.toFixed(2)}
               </ThemedText>
             </View>
           </View>
@@ -144,11 +215,26 @@ export default function ActivityScreen() {
           </ThemedText>
         </View>
 
-        <View style={styles.listContainer}>
-          {MOCK_ACTIVITY.map((log) => (
-            <ActivityLogItem key={log.id} log={log} />
-          ))}
-        </View>
+        {isLoading ? (
+          <ActivityIndicator color={theme.primary} style={{ marginTop: 20 }} />
+        ) : (
+          <View style={styles.listContainer}>
+            {mapped.length === 0 ? (
+              <ThemedText
+                type="default"
+                style={{
+                  color: theme.mutedForeground,
+                  textAlign: 'center',
+                  marginTop: 20,
+                }}
+              >
+                No activities yet. Tap + to log one.
+              </ThemedText>
+            ) : (
+              mapped.map((log) => <ActivityLogItem key={log.id} log={log} />)
+            )}
+          </View>
+        )}
       </ScrollView>
 
       <AddActivityModal

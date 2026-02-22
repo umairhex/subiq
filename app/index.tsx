@@ -1,12 +1,12 @@
 import { ThemedText } from '@/components/themed-text';
 import { AuthButton } from '@/components/ui/auth-button';
+import { AuthErrorBanner } from '@/components/ui/auth-error-banner';
 import { AuthInput } from '@/components/ui/auth-input';
-import { SocialAuthButtons } from '@/components/ui/social-auth-buttons';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -19,9 +19,20 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 type AuthMode = 'login' | 'signup';
 
+interface FieldErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+}
+
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export default function AuthScreen() {
   const router = useRouter();
   const { theme } = useAppTheme();
+  const { signIn, signUp } = useAuth();
   const [refreshing, setRefreshing] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>('signup');
   const [email, setEmail] = useState('');
@@ -29,6 +40,37 @@ export default function AuthScreen() {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const clearFieldError = (field: keyof FieldErrors) => {
+    setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
+    setFormError(null);
+  };
+
+  const validate = (): boolean => {
+    const errors: FieldErrors = {};
+
+    if (authMode === 'signup' && !name.trim()) {
+      errors.name = 'Please enter your full name.';
+    }
+
+    if (!email.trim()) {
+      errors.email = 'Email address is required.';
+    } else if (!isValidEmail(email.trim())) {
+      errors.email = 'Please enter a valid email address.';
+    }
+
+    if (!password) {
+      errors.password = 'Password is required.';
+    } else if (password.length < 6) {
+      errors.password = 'Password must be at least 6 characters.';
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -38,22 +80,45 @@ export default function AuthScreen() {
   }, []);
 
   const handleAuth = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please fill in all required fields');
-      return;
-    }
+    setFormError(null);
 
-    if (authMode === 'signup' && !name) {
-      Alert.alert('Error', 'Please enter your name');
-      return;
-    }
+    if (!validate()) return;
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      if (authMode === 'signup') {
+        const parts = name.trim().split(' ');
+        const firstName = parts[0] ?? '';
+        const lastName = parts.slice(1).join(' ') || '';
+        const result = await signUp(email, password, firstName, lastName);
+        if (result) {
+          if (!result.session) {
+            console.log('LOG: Signup complete, email verification required');
+            router.push({
+              pathname: '/verify-email',
+              params: { email },
+            });
+          } else {
+            console.log('LOG: Signup complete, auto-confirmed');
+          }
+        }
+      } else {
+        const result = await signIn(email, password);
+        if (result) {
+          console.log('LOG: Login complete, waiting for auth redirect');
+        }
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.';
+      console.log('ERROR: Auth failed:', message);
+      setFormError(message);
+    } finally {
       setIsLoading(false);
-      router.replace('/(tabs)');
-    }, 1500);
+    }
   };
 
   const toggleAuthMode = () => {
@@ -61,6 +126,8 @@ export default function AuthScreen() {
     setEmail('');
     setPassword('');
     setName('');
+    setFieldErrors({});
+    setFormError(null);
   };
 
   return (
@@ -100,14 +167,23 @@ export default function AuthScreen() {
           </View>
 
           <View style={styles.formSection}>
+            <AuthErrorBanner
+              message={formError}
+              onDismiss={() => setFormError(null)}
+            />
+
             {authMode === 'signup' && (
               <AuthInput
                 label="Full Name"
                 icon="person-outline"
                 placeholder="Enter your full name"
                 value={name}
-                onChangeText={setName}
+                onChangeText={(v) => {
+                  setName(v);
+                  clearFieldError('name');
+                }}
                 autoCapitalize="words"
+                error={fieldErrors.name}
               />
             )}
 
@@ -116,10 +192,14 @@ export default function AuthScreen() {
               icon="mail-outline"
               placeholder="example@domain.com"
               value={email}
-              onChangeText={setEmail}
+              onChangeText={(v) => {
+                setEmail(v);
+                clearFieldError('email');
+              }}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              error={fieldErrors.email}
             />
 
             <AuthInput
@@ -131,11 +211,15 @@ export default function AuthScreen() {
                   : 'Enter your password'
               }
               value={password}
-              onChangeText={setPassword}
+              onChangeText={(v) => {
+                setPassword(v);
+                clearFieldError('password');
+              }}
               autoCapitalize="none"
               showPasswordToggle
               isPasswordVisible={showPassword}
               onTogglePassword={() => setShowPassword(!showPassword)}
+              error={fieldErrors.password}
             />
 
             {authMode === 'login' && (
@@ -160,8 +244,6 @@ export default function AuthScreen() {
               isLoading={isLoading}
             />
           </View>
-
-          <SocialAuthButtons />
 
           {authMode === 'signup' && (
             <ThemedText

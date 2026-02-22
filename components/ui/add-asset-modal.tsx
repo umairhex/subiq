@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
+    KeyboardAvoidingView,
+    Modal,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    View,
 } from 'react-native';
+import { toast } from 'sonner-native';
 
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { ThemedText } from '../themed-text';
@@ -47,7 +47,7 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
       !purchaseDate.trim() ||
       !warrantyEnd.trim()
     ) {
-      Alert.alert('Error', 'Please fill in all fields');
+      toast.warning('Please fill in all fields');
       return;
     }
 
@@ -62,7 +62,7 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
       resetForm();
       onClose();
     } catch {
-      Alert.alert('Error', 'Failed to add asset');
+      toast.error('Failed to add asset');
     } finally {
       setIsLoading(false);
     }

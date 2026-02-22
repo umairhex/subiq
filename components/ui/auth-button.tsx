@@ -7,31 +7,43 @@ interface AuthButtonProps {
   title: string;
   onPress: () => void;
   isLoading?: boolean;
+  variant?: 'primary' | 'outline';
 }
 
-export function AuthButton({ title, onPress, isLoading }: AuthButtonProps) {
+export function AuthButton({
+  title,
+  onPress,
+  isLoading,
+  variant = 'primary',
+}: AuthButtonProps) {
   const { theme } = useAppTheme();
+  const isOutline = variant === 'outline';
+
   return (
     <Pressable
       style={[
         styles.submitButton,
         {
-          backgroundColor: theme.primary,
+          backgroundColor: isOutline ? 'transparent' : theme.primary,
+          borderWidth: isOutline ? 1.5 : 0,
+          borderColor: isOutline ? theme.primary : undefined,
           opacity: isLoading ? 0.7 : 1,
-          shadowColor: theme.primary,
+          shadowColor: isOutline ? 'transparent' : theme.primary,
         },
       ]}
       onPress={onPress}
       disabled={isLoading}
     >
       {isLoading ? (
-        <ActivityIndicator color={theme.primaryForeground} />
+        <ActivityIndicator
+          color={isOutline ? theme.primary : theme.primaryForeground}
+        />
       ) : (
         <>
           <Text
             style={[
               styles.submitButtonText,
-              { color: theme.primaryForeground },
+              { color: isOutline ? theme.primary : theme.primaryForeground },
             ]}
           >
             {title}
@@ -39,7 +51,7 @@ export function AuthButton({ title, onPress, isLoading }: AuthButtonProps) {
           <Ionicons
             name="arrow-forward"
             size={20}
-            color={theme.primaryForeground}
+            color={isOutline ? theme.primary : theme.primaryForeground}
             style={styles.buttonArrow}
           />
         </>

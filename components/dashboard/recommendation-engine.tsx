@@ -3,13 +3,14 @@ import { useCurrencyStore } from '@/stores/currency-store';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-  LayoutAnimation,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  UIManager,
-  View,
+    ActivityIndicator,
+    LayoutAnimation,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    UIManager,
+    View,
 } from 'react-native';
 
 if (
@@ -30,10 +31,14 @@ export interface Recommendation {
 
 interface RecommendationEngineProps {
   recommendations: Recommendation[];
+  onGenerate?: () => void;
+  isGenerating?: boolean;
 }
 
 export function RecommendationEngine({
   recommendations,
+  onGenerate,
+  isGenerating,
 }: RecommendationEngineProps) {
   const { theme } = useAppTheme();
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
@@ -62,11 +67,79 @@ export function RecommendationEngine({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Ionicons name="sparkles" size={20} color={theme.primary} />
-        <Text style={[styles.title, { color: theme.foreground }]}>
-          AI Recommendations
-        </Text>
+        <View style={styles.headerLeft}>
+          <Ionicons name="sparkles" size={20} color={theme.primary} />
+          <Text style={[styles.title, { color: theme.foreground }]}>
+            AI Recommendations
+          </Text>
+        </View>
+        {onGenerate && (
+          <Pressable
+            onPress={onGenerate}
+            disabled={isGenerating}
+            style={[
+              styles.generateBtn,
+              {
+                backgroundColor: theme.primary,
+                opacity: isGenerating ? 0.6 : 1,
+              },
+            ]}
+          >
+            {isGenerating ? (
+              <ActivityIndicator size="small" color={theme.primaryForeground} />
+            ) : (
+              <>
+                <Ionicons
+                  name="refresh"
+                  size={14}
+                  color={theme.primaryForeground}
+                />
+                <Text
+                  style={[
+                    styles.generateText,
+                    { color: theme.primaryForeground },
+                  ]}
+                >
+                  Generate
+                </Text>
+              </>
+            )}
+          </Pressable>
+        )}
       </View>
+
+      {recommendations.length === 0 && !isGenerating && (
+        <View
+          style={[
+            styles.emptyState,
+            { backgroundColor: theme.card, borderColor: theme.border },
+          ]}
+        >
+          <Ionicons
+            name="bulb-outline"
+            size={32}
+            color={theme.mutedForeground}
+          />
+          <Text style={[styles.emptyText, { color: theme.mutedForeground }]}>
+            Tap Generate to get AI-powered savings recommendations based on your
+            subscriptions.
+          </Text>
+        </View>
+      )}
+
+      {isGenerating && recommendations.length === 0 && (
+        <View
+          style={[
+            styles.emptyState,
+            { backgroundColor: theme.card, borderColor: theme.border },
+          ]}
+        >
+          <ActivityIndicator size="large" color={theme.primary} />
+          <Text style={[styles.emptyText, { color: theme.mutedForeground }]}>
+            Analyzing your subscriptions...
+          </Text>
+        </View>
+      )}
 
       {recommendations.map((rec) => {
         const isExpanded = expandedIds.includes(rec.id);
@@ -174,8 +247,13 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
     marginBottom: 12,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   title: {
     fontSize: 18,
@@ -253,5 +331,32 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 13,
     fontFamily: 'Inter-Bold',
+  },
+  generateBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  generateText: {
+    fontSize: 12,
+    fontFamily: 'Inter-Bold',
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 24,
+    borderRadius: 20,
+    borderWidth: 1,
+    gap: 12,
+    marginBottom: 12,
+  },
+  emptyText: {
+    fontSize: 13,
+    fontFamily: 'Inter',
+    textAlign: 'center',
+    lineHeight: 18,
   },
 });

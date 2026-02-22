@@ -2,23 +2,25 @@ import { ThemedText } from '@/components/themed-text';
 import { AuthButton } from '@/components/ui/auth-button';
 import { AuthInput } from '@/components/ui/auth-input';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAuth } from '@/hooks/use-auth';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { toast } from 'sonner-native';
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
   const { theme } = useAppTheme();
+  const { updatePassword } = useAuth();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -32,30 +34,27 @@ export default function ChangePasswordScreen() {
 
   const validatePasswords = () => {
     if (!currentPassword.trim()) {
-      Alert.alert('Error', 'Please enter your current password');
+      toast.warning('Please enter your current password');
       return false;
     }
 
     if (!newPassword.trim()) {
-      Alert.alert('Error', 'Please enter a new password');
+      toast.warning('Please enter a new password');
       return false;
     }
 
     if (newPassword.length < 8) {
-      Alert.alert('Error', 'New password must be at least 8 characters long');
+      toast.warning('New password must be at least 8 characters long');
       return false;
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert('Error', 'New passwords do not match');
+      toast.warning('New passwords do not match');
       return false;
     }
 
     if (currentPassword === newPassword) {
-      Alert.alert(
-        'Error',
-        'New password must be different from current password'
-      );
+      toast.warning('New password must be different from current password');
       return false;
     }
 
@@ -67,15 +66,17 @@ export default function ChangePasswordScreen() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const success = await updatePassword(newPassword);
+      if (success) {
+        toast.success('Your password has been changed successfully!', {
+          onAutoClose: () => router.back(),
+          onDismiss: () => router.back(),
+        });
+      }
+    } finally {
       setIsLoading(false);
-      Alert.alert('Success', 'Your password has been changed successfully!', [
-        {
-          text: 'OK',
-          onPress: () => router.back(),
-        },
-      ]);
-    }, 2000);
+    }
   };
 
   const handleBack = () => {

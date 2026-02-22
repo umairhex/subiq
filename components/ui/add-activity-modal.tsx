@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
   StyleSheet,
   View,
 } from 'react-native';
+import { toast } from 'sonner-native';
 
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { ThemedText } from '../themed-text';
@@ -42,7 +42,7 @@ export function AddActivityModal({
 
   const handleAdd = async () => {
     if (!platform.trim() || !activityName.trim() || !duration.trim()) {
-      Alert.alert('Error', 'Please fill in all fields');
+      toast.warning('Please fill in all fields');
       return;
     }
 
@@ -56,7 +56,7 @@ export function AddActivityModal({
       resetForm();
       onClose();
     } catch {
-      Alert.alert('Error', 'Failed to add activity');
+      toast.error('Failed to add activity');
     } finally {
       setIsLoading(false);
     }

@@ -2,17 +2,18 @@ import { useAppTheme } from '@/hooks/use-app-theme';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    TextInputProps,
+    View,
 } from 'react-native';
 
 interface AuthInputProps extends TextInputProps {
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
+  error?: string;
   showPasswordToggle?: boolean;
   isPasswordVisible?: boolean;
   onTogglePassword?: () => void;
@@ -21,25 +22,31 @@ interface AuthInputProps extends TextInputProps {
 export function AuthInput({
   label,
   icon,
+  error,
   showPasswordToggle,
   isPasswordVisible,
   onTogglePassword,
   ...props
 }: AuthInputProps) {
   const { theme } = useAppTheme();
+  const hasError = !!error;
+
   return (
     <View style={styles.inputGroup}>
       <Text style={[styles.label, { color: theme.foreground }]}>{label}</Text>
       <View
         style={[
           styles.inputWrapper,
-          { backgroundColor: theme.input, borderColor: theme.border },
+          {
+            backgroundColor: theme.input,
+            borderColor: hasError ? theme.destructive : theme.border,
+          },
         ]}
       >
         <Ionicons
           name={icon}
           size={20}
-          color={theme.foreground}
+          color={hasError ? theme.destructive : theme.foreground}
           style={styles.inputIcon}
         />
         <TextInput
@@ -58,6 +65,11 @@ export function AuthInput({
           </Pressable>
         )}
       </View>
+      {hasError && (
+        <Text style={[styles.errorText, { color: theme.destructive }]}>
+          {error}
+        </Text>
+      )}
     </View>
   );
 }
@@ -90,5 +102,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Inter',
     height: '100%',
+  },
+  errorText: {
+    fontSize: 13,
+    fontFamily: 'Inter',
+    marginLeft: 4,
   },
 });

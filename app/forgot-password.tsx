@@ -1,41 +1,62 @@
 import { ThemedText } from '@/components/themed-text';
 import { AuthButton } from '@/components/ui/auth-button';
+import { AuthErrorBanner } from '@/components/ui/auth-error-banner';
 import { AuthInput } from '@/components/ui/auth-input';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAuth } from '@/hooks/use-auth';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
   const { theme } = useAppTheme();
+  const { resetPassword } = useAuth();
 
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [emailError, setEmailError] = useState<string | undefined>();
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleResetPassword = async () => {
+    setFormError(null);
+    setEmailError(undefined);
+
     if (!email.trim()) {
-      Alert.alert('Error', 'Please enter your email address');
+      setEmailError('Email address is required.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setEmailError('Please enter a valid email address.');
       return;
     }
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const success = await resetPassword(email);
+      if (success) {
+        setEmailSent(true);
+      }
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : 'Something went wrong. Please try again.';
+      setFormError(message);
+    } finally {
       setIsLoading(false);
-      setEmailSent(true);
-    }, 2000);
+    }
   };
 
   const handleBackToLogin = () => {
@@ -203,15 +224,25 @@ export default function ForgotPasswordScreen() {
             </ThemedText>
 
             <View style={styles.form}>
+              <AuthErrorBanner
+                message={formError}
+                onDismiss={() => setFormError(null)}
+              />
+
               <AuthInput
                 label="Email Address"
                 icon="mail-outline"
                 placeholder="Enter your email"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(v) => {
+                  setEmail(v);
+                  setEmailError(undefined);
+                  setFormError(null);
+                }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
+                error={emailError}
               />
 
               <View style={styles.buttonContainer}>

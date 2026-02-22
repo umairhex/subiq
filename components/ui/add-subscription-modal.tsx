@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import {
-  Alert,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
+    KeyboardAvoidingView,
+    Modal,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
 } from 'react-native';
+import { toast } from 'sonner-native';
 
 import { useAppTheme } from '@/hooks/use-app-theme';
 import { ThemedText } from '../themed-text';
@@ -57,13 +57,13 @@ export function AddSubscriptionModal({
       !paymentMethod.trim() ||
       !startDate.trim()
     ) {
-      Alert.alert('Error', 'Please fill in all fields');
+      toast.warning('Please fill in all fields');
       return;
     }
 
     const priceNum = parseFloat(price);
     if (isNaN(priceNum) || priceNum <= 0) {
-      Alert.alert('Error', 'Please enter a valid price');
+      toast.warning('Please enter a valid price');
       return;
     }
 
@@ -79,7 +79,7 @@ export function AddSubscriptionModal({
       resetForm();
       onClose();
     } catch {
-      Alert.alert('Error', 'Failed to add subscription');
+      toast.error('Failed to add subscription');
     } finally {
       setIsLoading(false);
     }

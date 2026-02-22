@@ -2,26 +2,59 @@ import { AssetCard } from '@/components/assets/asset-card';
 import { ThemedText } from '@/components/themed-text';
 import { AddAssetModal } from '@/components/ui/add-asset-modal';
 import { StatsCard } from '@/components/ui/stats-card';
-import { MOCK_ASSETS } from '@/constants/mock-data';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { useAssets, useCreateAsset } from '@/hooks/use-assets';
+import { toAsset } from '@/utils/transforms';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    TextInput,
+    View,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AssetsScreen() {
   const { theme } = useAppTheme();
 
   const [showAddModal, setShowAddModal] = React.useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleAddAsset = (asset: {
+  const { data: assets, isLoading } = useAssets();
+  const createAsset = useCreateAsset();
+
+  const mapped = useMemo(() => (assets ?? []).map(toAsset), [assets]);
+
+  const filtered = useMemo(() => {
+    if (!searchQuery.trim()) return mapped;
+    const q = searchQuery.toLowerCase();
+    return mapped.filter(
+      (a) =>
+        a.name.toLowerCase().includes(q) || a.brand.toLowerCase().includes(q)
+    );
+  }, [mapped, searchQuery]);
+
+  const inWarranty = mapped.filter(
+    (a) => a.status !== 'Out of Warranty'
+  ).length;
+
+  const handleAddAsset = async (asset: {
     name: string;
     brand: string;
     purchaseDate: string;
     warrantyEnd: string;
   }): Promise<void> => {
     console.log('LOG: Adding asset:', asset);
-    return new Promise<void>((resolve) => setTimeout(resolve, 1000));
+    await createAsset.mutateAsync({
+      name: asset.name,
+      brand: asset.brand,
+      purchase_date: asset.purchaseDate,
+      warranty_end: asset.warrantyEnd,
+    });
+    setShowAddModal(false);
   };
 
   return (
@@ -60,23 +93,24 @@ export default function AssetsScreen() {
           items={[
             {
               label: 'Total Assets',
-              value: '12 Items',
+              value: `${mapped.length} Items`,
             },
             {
               label: 'In Warranty',
-              value: '8 Active',
+              value: `${inWarranty} Active`,
             },
           ]}
         />
 
         <View style={[styles.searchBar, { backgroundColor: theme.input }]}>
           <Ionicons name="search" size={20} color={theme.mutedForeground} />
-          <ThemedText
-            type="default"
-            style={[styles.searchText, { color: theme.mutedForeground }]}
-          >
-            Search assets or brands...
-          </ThemedText>
+          <TextInput
+            style={[styles.searchInput, { color: theme.foreground }]}
+            placeholder="Search assets or brands..."
+            placeholderTextColor={theme.mutedForeground}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
         </View>
 
         <View style={styles.sectionHeader}>
@@ -88,11 +122,30 @@ export default function AssetsScreen() {
           </ThemedText>
         </View>
 
-        <View style={styles.assetsList}>
-          {MOCK_ASSETS.map((asset) => (
-            <AssetCard key={asset.id} asset={asset} />
-          ))}
-        </View>
+        {isLoading ? (
+          <ActivityIndicator color={theme.primary} style={{ marginTop: 20 }} />
+        ) : (
+          <View style={styles.assetsList}>
+            {filtered.length === 0 ? (
+              <ThemedText
+                type="default"
+                style={{
+                  color: theme.mutedForeground,
+                  textAlign: 'center',
+                  marginTop: 20,
+                }}
+              >
+                {searchQuery
+                  ? 'No assets match your search.'
+                  : 'No assets yet. Tap + to add one.'}
+              </ThemedText>
+            ) : (
+              filtered.map((asset) => (
+                <AssetCard key={asset.id} asset={asset} />
+              ))
+            )}
+          </View>
+        )}
       </ScrollView>
 
       <AddAssetModal
@@ -144,9 +197,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 24,
   },
-  searchText: {
+  searchInput: {
     marginLeft: 12,
     fontSize: 15,
+    flex: 1,
   },
   sectionHeader: {
     marginBottom: 16,
