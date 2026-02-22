@@ -1,17 +1,20 @@
 import { Asset, AssetCard } from "@/components/assets/asset-card";
 import { ThemedText } from "@/components/themed-text";
+import { StatsCard } from "@/components/ui/stats-card";
 import { Colors } from "@/constants/theme";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    useColorScheme,
-    View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useColorScheme,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { AddAssetModal } from "@/components/ui/add-asset-modal";
 
 const MOCK_ASSETS: Asset[] = [
   {
@@ -56,6 +59,20 @@ export default function AssetsScreen() {
     overrideTheme === "system" ? colorScheme : overrideTheme;
   const theme = Colors[effectiveColorScheme];
 
+  const [showAddModal, setShowAddModal] = React.useState(false);
+
+  const handleAddAsset = async (asset: {
+    name: string;
+    brand: string;
+    purchaseDate: string;
+    warrantyEnd: string;
+  }) => {
+    // TODO: Implement API call to add asset
+    console.log("Adding asset:", asset);
+    // For now, just show success message
+    return new Promise((resolve) => setTimeout(resolve, 1000));
+  };
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
@@ -82,68 +99,25 @@ export default function AssetsScreen() {
           </View>
           <Pressable
             style={[styles.addBtn, { backgroundColor: theme.primary }]}
+            onPress={() => setShowAddModal(true)}
           >
             <Ionicons name="add" size={24} color={theme.primaryForeground} />
           </Pressable>
         </View>
 
-        <View
-          style={[
-            styles.summaryCard,
+        <StatsCard
+          items={[
             {
-              backgroundColor: theme.primary + "08",
-              borderColor: theme.primary + "20",
+              label: "Total Assets",
+              value: "12 Items",
+            },
+            {
+              label: "In Warranty",
+              value: "8 Active",
             },
           ]}
-        >
-          <View style={styles.summaryRow}>
-            <View style={styles.summaryItem}>
-              <Ionicons name="cube" size={24} color={theme.primary} />
-              <View>
-                <ThemedText
-                  type="default"
-                  style={[
-                    styles.summaryLabel,
-                    { color: theme.mutedForeground },
-                  ]}
-                >
-                  Total Assets
-                </ThemedText>
-                <ThemedText
-                  type="subtitle"
-                  style={[styles.summaryValue, { color: theme.foreground }]}
-                >
-                  12 Items
-                </ThemedText>
-              </View>
-            </View>
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <View style={styles.summaryItem}>
-              <Ionicons
-                name="shield-checkmark"
-                size={24}
-                color={theme.primary}
-              />
-              <View>
-                <ThemedText
-                  type="default"
-                  style={[
-                    styles.summaryLabel,
-                    { color: theme.mutedForeground },
-                  ]}
-                >
-                  In Warranty
-                </ThemedText>
-                <ThemedText
-                  type="subtitle"
-                  style={[styles.summaryValue, { color: theme.foreground }]}
-                >
-                  8 Active
-                </ThemedText>
-              </View>
-            </View>
-          </View>
-        </View>
+          theme={theme}
+        />
 
         <View style={[styles.searchBar, { backgroundColor: theme.input }]}>
           <Ionicons name="search" size={20} color={theme.mutedForeground} />
@@ -170,6 +144,13 @@ export default function AssetsScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <AddAssetModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddAsset}
+        theme={theme}
+      />
     </SafeAreaView>
   );
 }
@@ -205,42 +186,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-  },
-  summaryCard: {
-    padding: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  summaryItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    flex: 1,
-  },
-  summaryLabel: {
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-  },
-  summaryValue: {
-    fontSize: 20,
-    marginTop: 2,
-  },
-  divider: {
-    width: 1,
-    height: 40,
-    opacity: 0.3,
   },
   searchBar: {
     height: 48,

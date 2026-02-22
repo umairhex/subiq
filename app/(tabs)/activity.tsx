@@ -1,21 +1,24 @@
 import {
-    ActivityLog,
-    ActivityLogItem,
+  ActivityLog,
+  ActivityLogItem,
 } from "@/components/activity/activity-log-item";
 import { ThemedText } from "@/components/themed-text";
+import { StatsCard } from "@/components/ui/stats-card";
 import { Colors } from "@/constants/theme";
 import { useCurrencyStore } from "@/stores/currency-store";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    useColorScheme,
-    View,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  useColorScheme,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+import { AddActivityModal } from "@/components/ui/add-activity-modal";
 
 const MOCK_ACTIVITY: ActivityLog[] = [
   {
@@ -24,7 +27,6 @@ const MOCK_ACTIVITY: ActivityLog[] = [
     activityName: "Watched 'Dune: Part Two'",
     date: "Today, 8:45 PM",
     duration: "2h 46m",
-    icon: "play-circle",
   },
   {
     id: "2",
@@ -32,7 +34,6 @@ const MOCK_ACTIVITY: ActivityLog[] = [
     activityName: "Listening to 'Techno Bunker'",
     date: "Today, 10:30 AM",
     duration: "45m",
-    icon: "musical-note",
   },
   {
     id: "3",
@@ -40,7 +41,6 @@ const MOCK_ACTIVITY: ActivityLog[] = [
     activityName: "Project: Logo Design",
     date: "Yesterday",
     duration: "3h 15m",
-    icon: "brush",
   },
   {
     id: "4",
@@ -48,7 +48,6 @@ const MOCK_ACTIVITY: ActivityLog[] = [
     activityName: "Watched 'The Gentlemen'",
     date: "March 18, 2024",
     duration: "52m",
-    icon: "play-circle",
   },
 ];
 
@@ -59,6 +58,19 @@ export default function ActivityScreen() {
   const effectiveColorScheme =
     overrideTheme === "system" ? colorScheme : overrideTheme;
   const theme = Colors[effectiveColorScheme];
+
+  const [showAddModal, setShowAddModal] = React.useState(false);
+
+  const handleAddActivity = async (activity: {
+    platform: string;
+    activityName: string;
+    duration: string;
+  }) => {
+    // TODO: Implement API call to add activity
+    console.log("Adding activity:", activity);
+    // For now, just show success message
+    return new Promise((resolve) => setTimeout(resolve, 1000));
+  };
 
   return (
     <SafeAreaView
@@ -86,70 +98,28 @@ export default function ActivityScreen() {
           </View>
           <Pressable
             style={[styles.logBtn, { backgroundColor: theme.primary }]}
+            onPress={() => setShowAddModal(true)}
           >
             <Ionicons name="add" size={20} color={theme.primaryForeground} />
           </Pressable>
         </View>
 
-        <View
-          style={[
-            styles.statsCard,
+        <StatsCard
+          items={[
             {
-              backgroundColor: theme.primary + "08",
-              borderColor: theme.primary + "20",
+              label: "Most Used",
+              value: "Netflix",
+              trend: "+12% this week",
+              trendColor: theme.primary,
+            },
+            {
+              label: "Total Time",
+              value: "24.5h",
+              trend: "vs 22h last week",
             },
           ]}
-        >
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Ionicons name="flash" size={24} color={theme.primary} />
-              <View>
-                <ThemedText
-                  type="default"
-                  style={[styles.statLabel, { color: theme.mutedForeground }]}
-                >
-                  Most Used
-                </ThemedText>
-                <ThemedText
-                  type="subtitle"
-                  style={[styles.statValue, { color: theme.foreground }]}
-                >
-                  Netflix
-                </ThemedText>
-                <ThemedText
-                  type="default"
-                  style={[styles.statTrend, { color: theme.primary }]}
-                >
-                  +12% this week
-                </ThemedText>
-              </View>
-            </View>
-            <View style={[styles.divider, { backgroundColor: theme.border }]} />
-            <View style={styles.statItem}>
-              <Ionicons name="time" size={24} color={theme.primary} />
-              <View>
-                <ThemedText
-                  type="default"
-                  style={[styles.statLabel, { color: theme.mutedForeground }]}
-                >
-                  Total Time
-                </ThemedText>
-                <ThemedText
-                  type="subtitle"
-                  style={[styles.statValue, { color: theme.foreground }]}
-                >
-                  24.5h
-                </ThemedText>
-                <ThemedText
-                  type="default"
-                  style={[styles.statTrend, { color: theme.mutedForeground }]}
-                >
-                  vs 22h last week
-                </ThemedText>
-              </View>
-            </View>
-          </View>
-        </View>
+          theme={theme}
+        />
 
         <View
           style={[
@@ -157,15 +127,7 @@ export default function ActivityScreen() {
             { backgroundColor: theme.card, borderColor: theme.border },
           ]}
         >
-          <View
-            style={[
-              styles.intelligenceIcon,
-              { backgroundColor: theme.primary + "20" },
-            ]}
-          >
-            <Ionicons name="analytics" size={24} color={theme.primary} />
-          </View>
-          <View style={{ flex: 1 }}>
+          <View style={styles.intelligenceContent}>
             <ThemedText
               type="subtitle"
               style={[styles.intelligenceTitle, { color: theme.foreground }]}
@@ -182,6 +144,42 @@ export default function ActivityScreen() {
               Your cost-per-watch for Netflix is {currency.symbol}1.20.
               You&apos;re getting great value!
             </ThemedText>
+          </View>
+
+          <View style={styles.intelligenceMetrics}>
+            <View style={styles.metricItem}>
+              <ThemedText
+                type="default"
+                style={[styles.metricLabel, { color: theme.mutedForeground }]}
+              >
+                This Month
+              </ThemedText>
+              <ThemedText
+                type="title"
+                style={[styles.metricValue, { color: theme.foreground }]}
+              >
+                {currency.symbol}24.50
+              </ThemedText>
+            </View>
+
+            <View
+              style={[styles.metricDivider, { backgroundColor: theme.border }]}
+            />
+
+            <View style={styles.metricItem}>
+              <ThemedText
+                type="default"
+                style={[styles.metricLabel, { color: theme.mutedForeground }]}
+              >
+                Avg. per Watch
+              </ThemedText>
+              <ThemedText
+                type="title"
+                style={[styles.metricValue, { color: theme.foreground }]}
+              >
+                {currency.symbol}1.20
+              </ThemedText>
+            </View>
           </View>
         </View>
 
@@ -200,6 +198,13 @@ export default function ActivityScreen() {
           ))}
         </View>
       </ScrollView>
+
+      <AddActivityModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddActivity}
+        theme={theme}
+      />
     </SafeAreaView>
   );
 }
@@ -236,71 +241,56 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  statsCard: {
-    padding: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
-  },
-  statsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  statItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    flex: 1,
-  },
-  statLabel: {
-    fontSize: 12,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-  },
-  statValue: {
-    fontSize: 20,
-    marginTop: 2,
-  },
-  statTrend: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  divider: {
-    width: 1,
-    height: 40,
-    opacity: 0.3,
-  },
   intelligenceCard: {
     padding: 20,
-    borderRadius: 20,
+    borderRadius: 16,
     borderWidth: 1,
     marginBottom: 24,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 3,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  intelligenceIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+  intelligenceContent: {
+    marginBottom: 20,
   },
   intelligenceTitle: {
     fontSize: 18,
-    marginBottom: 4,
+    fontWeight: "600",
+    marginBottom: 6,
   },
   intelligenceDesc: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  intelligenceMetrics: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0,0,0,0.05)",
+  },
+  metricItem: {
+    flex: 1,
+    alignItems: "center",
+  },
+  metricLabel: {
+    fontSize: 12,
+    fontWeight: "500",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+    marginBottom: 4,
+    opacity: 0.7,
+  },
+  metricValue: {
+    fontSize: 20,
+    fontWeight: "700",
+  },
+  metricDivider: {
+    width: 1,
+    height: 40,
+    marginHorizontal: 20,
+    opacity: 0.3,
   },
   sectionHeader: {
     marginBottom: 16,

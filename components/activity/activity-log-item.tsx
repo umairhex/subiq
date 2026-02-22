@@ -9,7 +9,6 @@ export interface ActivityLog {
   date: string;
   duration?: string;
   notes?: string;
-  icon: keyof typeof Ionicons.glyphMap;
 }
 
 interface ActivityLogItemProps {
@@ -26,42 +25,54 @@ export function ActivityLogItem({ log, theme }: ActivityLogItemProps) {
           backgroundColor: theme.card,
           borderColor: theme.border,
           shadowColor: theme.foreground,
-          elevation: 2,
         },
       ]}
     >
-      <View
-        style={[
-          styles.iconContainer,
-          { backgroundColor: theme.primary + "20" },
-        ]}
-      >
-        <Ionicons name={log.icon} size={20} color={theme.primary} />
-      </View>
+      <View style={[styles.accentLine, { backgroundColor: theme.primary }]} />
+
       <View style={styles.content}>
-        <View style={styles.topRow}>
-          <Text style={[styles.platform, { color: theme.mutedForeground }]}>
+        <View style={styles.headerRow}>
+          <Text style={[styles.platform, { color: theme.primary }]}>
             {log.platform}
           </Text>
           <Text style={[styles.date, { color: theme.mutedForeground }]}>
             {log.date}
           </Text>
         </View>
+
         <Text style={[styles.activityName, { color: theme.foreground }]}>
           {log.activityName}
         </Text>
+
         {log.duration && (
-          <View style={styles.metaRow}>
-            <Ionicons
-              name="time-outline"
-              size={14}
-              color={theme.mutedForeground}
-            />
-            <Text style={[styles.metaText, { color: theme.mutedForeground }]}>
-              {log.duration}
-            </Text>
+          <View style={styles.metaContainer}>
+            <View
+              style={[
+                styles.durationBadge,
+                { backgroundColor: theme.muted + "20" },
+              ]}
+            >
+              <Ionicons
+                name="time-outline"
+                size={12}
+                color={theme.mutedForeground}
+              />
+              <Text
+                style={[styles.durationText, { color: theme.mutedForeground }]}
+              >
+                {log.duration}
+              </Text>
+            </View>
           </View>
         )}
+      </View>
+
+      <View style={styles.arrowContainer}>
+        <Ionicons
+          name="chevron-forward"
+          size={16}
+          color={theme.mutedForeground}
+        />
       </View>
     </View>
   );
@@ -70,53 +81,64 @@ export function ActivityLogItem({ log, theme }: ActivityLogItemProps) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    alignItems: "center",
     padding: 16,
+    marginBottom: 12,
     borderRadius: 16,
     borderWidth: 1,
-    marginBottom: 8,
-    alignItems: "center",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 12,
+  accentLine: {
+    width: 4,
+    height: "70%",
+    borderRadius: 2,
+    marginRight: 16,
   },
   content: {
     flex: 1,
   },
-  topRow: {
+  headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 4,
+    alignItems: "center",
+    marginBottom: 6,
   },
   platform: {
-    fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontSize: 13,
+    fontWeight: "600",
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   date: {
     fontSize: 12,
-    fontFamily: "Inter",
+    fontWeight: "400",
   },
   activityName: {
     fontSize: 16,
-    fontFamily: "Inter-Bold",
-    marginBottom: 6,
+    fontWeight: "500",
+    lineHeight: 22,
+    marginBottom: 8,
   },
-  metaRow: {
+  metaContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  durationBadge: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
   },
-  metaText: {
-    fontSize: 13,
-    fontFamily: "Inter",
+  durationText: {
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  arrowContainer: {
+    marginLeft: 12,
   },
 });

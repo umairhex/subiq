@@ -61,8 +61,7 @@ export function ExpenseSummary({
       </View>
 
       <Text style={[styles.amount, { color: theme.foreground }]}>
-        {currency.symbol}
-        {totalMonthly.toFixed(2)}
+        {currency.symbol} {totalMonthly.toFixed(2)}
       </Text>
 
       <View style={[styles.yearlyBox, { borderColor: theme.border }]}>
@@ -71,8 +70,7 @@ export function ExpenseSummary({
             Yearly Projection
           </Text>
           <Text style={[styles.yearlyAmount, { color: theme.foreground }]}>
-            {currency.symbol}
-            {totalYearly.toFixed(2)}
+            {currency.symbol} {totalYearly.toFixed(2)}
           </Text>
         </View>
         <Ionicons name="calendar" size={24} color={theme.primary} />

@@ -1,3 +1,4 @@
+import { AssetLog } from "@/components/assets/asset-log-item";
 import { ExpenseSummary } from "@/components/dashboard/expense-summary";
 import {
     Recommendation,
@@ -7,7 +8,10 @@ import {
     Subscription,
     SubscriptionCard,
 } from "@/components/dashboard/subscription-card";
+import { SubscriptionLog } from "@/components/dashboard/subscription-log-item";
+import { UnifiedLogsSection } from "@/components/dashboard/unified-logs-section";
 import { ThemedText } from "@/components/themed-text";
+import { AddSubscriptionModal } from "@/components/ui/add-subscription-modal";
 import { Colors } from "@/constants/theme";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
@@ -81,12 +85,89 @@ const MOCK_RECOMMENDATIONS: Recommendation[] = [
   },
 ];
 
+const MOCK_ASSET_LOGS: AssetLog[] = [
+  {
+    id: "1",
+    assetName: "MacBook Pro M2",
+    action: "Added",
+    date: "Feb 15, 2024",
+    details: "Added with 1-year warranty",
+  },
+  {
+    id: "2",
+    assetName: "Washing Machine",
+    action: "Warranty Expiring",
+    date: "Feb 10, 2024",
+    details: "Warranty expires in 12 days",
+  },
+  {
+    id: "3",
+    assetName: "PS5 Console",
+    action: "Warranty Expired",
+    date: "Jan 15, 2024",
+    details: "Warranty expired 1 month ago",
+  },
+  {
+    id: "4",
+    assetName: "MacBook Pro M2",
+    action: "Maintenance Due",
+    date: "Jan 20, 2024",
+    details: "Recommended cleaning and software update",
+  },
+];
+
+const MOCK_SUBSCRIPTION_LOGS: SubscriptionLog[] = [
+  {
+    id: "1",
+    subscriptionName: "Netflix",
+    action: "Added",
+    date: "Feb 15, 2024",
+    details: "Monthly subscription added",
+  },
+  {
+    id: "2",
+    subscriptionName: "Spotify Premium",
+    action: "Renewed",
+    date: "Feb 10, 2024",
+    details: "Auto-renewed for $10.99",
+  },
+  {
+    id: "3",
+    subscriptionName: "Adobe Creative Cloud",
+    action: "Price Changed",
+    date: "Jan 20, 2024",
+    details: "Price increased from $599 to $699",
+  },
+  {
+    id: "4",
+    subscriptionName: "Disney+",
+    action: "Cancelled",
+    date: "Jan 15, 2024",
+    details: "Subscription cancelled by user",
+  },
+];
+
 export default function DashboardScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const { theme: overrideTheme } = useThemeStore();
   const effectiveColorScheme =
     overrideTheme === "system" ? colorScheme : overrideTheme;
   const theme = Colors[effectiveColorScheme];
+
+  const [showAddModal, setShowAddModal] = React.useState(false);
+
+  const handleAddSubscription = async (subscription: {
+    name: string;
+    price: string;
+    billingCycle: "Monthly" | "Yearly";
+    paymentMethod: string;
+    startDate: string;
+  }) => {
+    // TODO: Implement API call to add subscription
+    console.log("Adding subscription:", subscription);
+    // For now, just show success message
+    return new Promise((resolve) => setTimeout(resolve, 1000));
+  };
 
   return (
     <SafeAreaView
@@ -120,6 +201,12 @@ export default function DashboardScreen() {
           theme={theme}
         />
 
+        <UnifiedLogsSection
+          assetLogs={MOCK_ASSET_LOGS}
+          subscriptionLogs={MOCK_SUBSCRIPTION_LOGS}
+          theme={theme}
+        />
+
         <View style={styles.sectionHeader}>
           <ThemedText
             type="subtitle"
@@ -141,9 +228,17 @@ export default function DashboardScreen() {
           styles.fab,
           { backgroundColor: theme.primary, shadowColor: theme.primary },
         ]}
+        onPress={() => setShowAddModal(true)}
       >
         <Ionicons name="add" size={32} color={theme.primaryForeground} />
       </Pressable>
+
+      <AddSubscriptionModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onAdd={handleAddSubscription}
+        theme={theme}
+      />
     </SafeAreaView>
   );
 }
