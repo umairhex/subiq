@@ -1,18 +1,18 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { useCurrencyStore } from "@/stores/currency-store";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useCurrencyStore } from '@/stores/currency-store';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export interface Subscription {
   id: string;
   name: string;
   startDate: string;
   renewalDate: string;
-  billingCycle: "Monthly" | "Yearly";
+  billingCycle: 'Monthly' | 'Yearly';
   price: number;
   paymentMethod: string;
-  status: "Active" | "Trial" | "Cancelled";
+  status: 'Active' | 'Trial' | 'Cancelled';
   daysLeft: number;
   icon: keyof typeof Ionicons.glyphMap;
 }
@@ -27,11 +27,11 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
 
   const getStatusColor = () => {
     switch (subscription.status) {
-      case "Active":
+      case 'Active':
         return theme.primary;
-      case "Trial":
+      case 'Trial':
         return theme.warning;
-      case "Cancelled":
+      case 'Cancelled':
         return theme.mutedForeground;
       default:
         return theme.primary;
@@ -97,7 +97,7 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
 
       <View style={styles.footer}>
         <Text style={[styles.countdown, { color: theme.mutedForeground }]}>
-          Renews in{" "}
+          Renews in{' '}
           <Text style={{ color: theme.foreground }}>
             {subscription.daysLeft} days
           </Text>
@@ -121,33 +121,33 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   topRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   platformInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   iconBox: {
     width: 40,
     height: 40,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   name: {
     fontSize: 15,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   billing: {
     fontSize: 12,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   price: {
     fontSize: 16,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   divider: {
     height: 1,
@@ -155,30 +155,30 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   detailsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   detailLabel: {
     fontSize: 11,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     marginBottom: 2,
   },
   detailValue: {
     fontSize: 13,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   statusBox: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 16,
-    backgroundColor: "rgba(0,0,0,0.03)",
+    backgroundColor: 'rgba(0,0,0,0.03)',
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   statusDot: {
     width: 6,
@@ -187,20 +187,20 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   countdown: {
     fontSize: 12,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   method: {
     fontSize: 11,
-    fontFamily: "Inter",
-    fontStyle: "italic",
+    fontFamily: 'Inter',
+    fontStyle: 'italic',
   },
 });

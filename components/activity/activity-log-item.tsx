@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export interface ActivityLog {
   id: string;
@@ -25,12 +25,11 @@ export function ActivityLogItem({ log }: ActivityLogItemProps) {
         {
           backgroundColor: theme.card,
           borderColor: theme.border,
+          borderLeftColor: theme.primary,
           shadowColor: theme.foreground,
         },
       ]}
     >
-      <View style={[styles.accentLine, { backgroundColor: theme.primary }]} />
-
       <View style={styles.content}>
         <View style={styles.headerRow}>
           <Text style={[styles.platform, { color: theme.primary }]}>
@@ -50,7 +49,7 @@ export function ActivityLogItem({ log }: ActivityLogItemProps) {
             <View
               style={[
                 styles.durationBadge,
-                { backgroundColor: theme.muted + "20" },
+                { backgroundColor: theme.muted + '20' },
               ]}
             >
               <Ionicons
@@ -81,55 +80,50 @@ export function ActivityLogItem({ log }: ActivityLogItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     marginBottom: 12,
     borderRadius: 16,
     borderWidth: 1,
+    borderLeftWidth: 4,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 8,
     elevation: 2,
   },
-  accentLine: {
-    width: 4,
-    height: "70%",
-    borderRadius: 2,
-    marginRight: 16,
-  },
   content: {
     flex: 1,
   },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 6,
   },
   platform: {
     fontSize: 13,
-    fontWeight: "600",
-    textTransform: "uppercase",
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   date: {
     fontSize: 12,
-    fontWeight: "400",
+    fontWeight: '400',
   },
   activityName: {
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 22,
     marginBottom: 8,
   },
   metaContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   durationBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -137,7 +131,7 @@ const styles = StyleSheet.create({
   },
   durationText: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   arrowContainer: {
     marginLeft: 12,

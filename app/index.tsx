@@ -1,33 +1,32 @@
-import { ThemedText } from "@/components/themed-text";
-import { AuthButton } from "@/components/ui/auth-button";
-import { AuthInput } from "@/components/ui/auth-input";
-import { SocialAuthButtons } from "@/components/ui/social-auth-buttons";
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+import { ThemedText } from '@/components/themed-text';
+import { AuthButton } from '@/components/ui/auth-button';
+import { AuthInput } from '@/components/ui/auth-input';
+import { SocialAuthButtons } from '@/components/ui/social-auth-buttons';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-type AuthMode = "login" | "signup";
+type AuthMode = 'login' | 'signup';
 
 export default function AuthScreen() {
   const router = useRouter();
   const { theme } = useAppTheme();
   const [refreshing, setRefreshing] = useState(false);
-  const [authMode, setAuthMode] = useState<AuthMode>("signup");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [authMode, setAuthMode] = useState<AuthMode>('signup');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,12 +39,12 @@ export default function AuthScreen() {
 
   const handleAuth = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all required fields");
+      Alert.alert('Error', 'Please fill in all required fields');
       return;
     }
 
-    if (authMode === "signup" && !name) {
-      Alert.alert("Error", "Please enter your name");
+    if (authMode === 'signup' && !name) {
+      Alert.alert('Error', 'Please enter your name');
       return;
     }
 
@@ -53,22 +52,22 @@ export default function AuthScreen() {
 
     setTimeout(() => {
       setIsLoading(false);
-      router.replace("/(tabs)");
+      router.replace('/(tabs)');
     }, 1500);
   };
 
   const toggleAuthMode = () => {
-    setAuthMode(authMode === "login" ? "signup" : "login");
-    setEmail("");
-    setPassword("");
-    setName("");
+    setAuthMode(authMode === 'login' ? 'signup' : 'login');
+    setEmail('');
+    setPassword('');
+    setName('');
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -83,38 +82,25 @@ export default function AuthScreen() {
             />
           }
         >
-          <View style={styles.header}>
-            <Pressable
-              style={[styles.backButton, { backgroundColor: theme.input }]}
-            >
-              <Ionicons
-                name="chevron-back"
-                size={24}
-                color={theme.foreground}
-              />
-            </Pressable>
-            <View style={{ width: 44 }} />
-          </View>
-
           <View style={styles.titleSection}>
             <ThemedText
               type="title"
               style={[styles.mainTitle, { color: theme.foreground }]}
             >
-              {authMode === "signup" ? "Join SUBIQ" : "Welcome Back"}
+              {authMode === 'signup' ? 'Join SUBIQ' : 'Welcome Back'}
             </ThemedText>
             <ThemedText
               type="subtitle"
               style={[styles.subTitle, { color: theme.mutedForeground }]}
             >
-              {authMode === "signup"
-                ? "AI-driven subscription auditing for your peace of mind."
-                : "Unlock the power of AI to manage your subscriptions effortlessly."}
+              {authMode === 'signup'
+                ? 'AI-driven subscription auditing for your peace of mind.'
+                : 'Unlock the power of AI to manage your subscriptions effortlessly.'}
             </ThemedText>
           </View>
 
           <View style={styles.formSection}>
-            {authMode === "signup" && (
+            {authMode === 'signup' && (
               <AuthInput
                 label="Full Name"
                 icon="person-outline"
@@ -140,9 +126,9 @@ export default function AuthScreen() {
               label="Password"
               icon="lock-closed-outline"
               placeholder={
-                authMode === "signup"
-                  ? "Create a strong password"
-                  : "Enter your password"
+                authMode === 'signup'
+                  ? 'Create a strong password'
+                  : 'Enter your password'
               }
               value={password}
               onChangeText={setPassword}
@@ -152,9 +138,9 @@ export default function AuthScreen() {
               onTogglePassword={() => setShowPassword(!showPassword)}
             />
 
-            {authMode === "login" && (
+            {authMode === 'login' && (
               <View style={styles.forgotPasswordContainer}>
-                <Pressable onPress={() => router.push("/forgot-password")}>
+                <Pressable onPress={() => router.push('/forgot-password')}>
                   <ThemedText
                     type="default"
                     style={[
@@ -169,7 +155,7 @@ export default function AuthScreen() {
             )}
 
             <AuthButton
-              title={authMode === "signup" ? "Sign Up" : "Log In"}
+              title={authMode === 'signup' ? 'Sign Up' : 'Log In'}
               onPress={handleAuth}
               isLoading={isLoading}
             />
@@ -177,22 +163,22 @@ export default function AuthScreen() {
 
           <SocialAuthButtons />
 
-          {authMode === "signup" && (
+          {authMode === 'signup' && (
             <ThemedText
               type="default"
               style={[styles.termsText, { color: theme.mutedForeground }]}
             >
-              By signing up, you agree to our{" "}
+              By signing up, you agree to our{' '}
               <ThemedText
                 type="link"
-                style={{ textDecorationLine: "underline" }}
+                style={{ textDecorationLine: 'underline' }}
               >
                 Terms of Service
-              </ThemedText>{" "}
-              and{" "}
+              </ThemedText>{' '}
+              and{' '}
               <ThemedText
                 type="link"
-                style={{ textDecorationLine: "underline" }}
+                style={{ textDecorationLine: 'underline' }}
               >
                 Privacy Policy
               </ThemedText>
@@ -205,8 +191,8 @@ export default function AuthScreen() {
               type="default"
               style={[styles.footerText, { color: theme.foreground }]}
             >
-              {authMode === "signup"
-                ? "Already have an account? "
+              {authMode === 'signup'
+                ? 'Already have an account? '
                 : "Don't have an account? "}
             </ThemedText>
             <Pressable onPress={toggleAuthMode}>
@@ -214,7 +200,7 @@ export default function AuthScreen() {
                 type="defaultSemiBold"
                 style={[styles.footerLink, { color: theme.primary }]}
               >
-                {authMode === "signup" ? "Log In" : "Sign Up"}
+                {authMode === 'signup' ? 'Log In' : 'Sign Up'}
               </ThemedText>
             </Pressable>
           </View>
@@ -229,54 +215,43 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 24,
     paddingBottom: 40,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 20,
-    marginBottom: 40,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
+    paddingTop: 60,
   },
   titleSection: {
     marginBottom: 32,
   },
   mainTitle: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 8,
     letterSpacing: -1,
   },
   subTitle: {
     lineHeight: 26,
     opacity: 0.8,
+    fontSize: 16,
+    fontWeight: 'normal',
   },
   formSection: {
     marginBottom: 32,
   },
   forgotPasswordContainer: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     marginBottom: 16,
   },
   forgotPasswordText: {
     fontSize: 14,
   },
   termsText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 13,
     lineHeight: 20,
     marginBottom: 32,
     paddingHorizontal: 10,
   },
   footerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   footerText: {
     fontSize: 16,

@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 interface SocialAuthButtonsProps {
   onGooglePress?: () => void;
@@ -40,11 +40,11 @@ export function SocialAuthButtons({
           onPress={onApplePress}
           style={[
             styles.socialButton,
-            { backgroundColor: "#000", borderColor: "#000" },
+            { backgroundColor: '#000', borderColor: '#000' },
           ]}
         >
           <Ionicons name="logo-apple" size={22} color="#fff" />
-          <Text style={[styles.socialButtonText, { color: "#fff" }]}>
+          <Text style={[styles.socialButtonText, { color: '#fff' }]}>
             Apple
           </Text>
         </Pressable>
@@ -55,8 +55,8 @@ export function SocialAuthButtons({
 
 const styles = StyleSheet.create({
   dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 32,
     marginTop: 12,
   },
@@ -68,19 +68,19 @@ const styles = StyleSheet.create({
   dividerText: {
     marginHorizontal: 16,
     fontSize: 14,
-    fontWeight: "500",
-    fontFamily: "Inter",
+    fontWeight: '500',
+    fontFamily: 'Inter',
   },
   socialRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
     marginBottom: 32,
   },
   socialButton: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 56,
     borderRadius: 16,
     borderWidth: 1,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   socialButtonText: {
     fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter",
+    fontWeight: '600',
+    fontFamily: 'Inter',
   },
 });

@@ -1,21 +1,21 @@
-import { appStorage } from "@/utils/storage";
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { appStorage } from '@/utils/storage';
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface ThemeState {
-  theme: "light" | "dark" | "system";
-  setTheme: (theme: "light" | "dark" | "system") => void;
+  theme: 'light' | 'dark' | 'system';
+  setTheme: (theme: 'light' | 'dark' | 'system') => void;
 }
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      theme: "system",
+      theme: 'system',
       setTheme: (theme) => set({ theme }),
     }),
     {
-      name: "theme-storage",
+      name: 'theme-storage',
       storage: appStorage,
-    },
-  ),
+    }
+  )
 );

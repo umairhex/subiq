@@ -1,5 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createJSONStorage } from "zustand/middleware";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createJSONStorage } from 'zustand/middleware';
 
 export const appStorage = createJSONStorage(() => ({
   getItem: async (name: string) => {

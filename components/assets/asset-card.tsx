@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export interface Asset {
   id: string;
@@ -12,7 +12,7 @@ export interface Asset {
   warrantyEnd: string;
   hasInvoice: boolean;
   reminderEnabled: boolean;
-  status: "In Warranty" | "Expiring Soon" | "Out of Warranty";
+  status: 'In Warranty' | 'Expiring Soon' | 'Out of Warranty';
 }
 
 interface AssetCardProps {
@@ -21,8 +21,8 @@ interface AssetCardProps {
 
 export function AssetCard({ asset }: AssetCardProps) {
   const { theme } = useAppTheme();
-  const isExpiringSoon = asset.status === "Expiring Soon";
-  const isOutOfWarranty = asset.status === "Out of Warranty";
+  const isExpiringSoon = asset.status === 'Expiring Soon';
+  const isOutOfWarranty = asset.status === 'Out of Warranty';
 
   const getStatusColor = () => {
     if (isOutOfWarranty) return theme.mutedForeground;
@@ -58,7 +58,7 @@ export function AssetCard({ asset }: AssetCardProps) {
           style={[
             styles.statusBadge,
             {
-              backgroundColor: getStatusColor() + "20",
+              backgroundColor: getStatusColor() + '20',
               borderColor: getStatusColor(),
             },
           ]}
@@ -66,10 +66,10 @@ export function AssetCard({ asset }: AssetCardProps) {
           <Ionicons
             name={
               isOutOfWarranty
-                ? "close-circle"
+                ? 'close-circle'
                 : isExpiringSoon
-                  ? "warning"
-                  : "checkmark-circle"
+                  ? 'warning'
+                  : 'checkmark-circle'
             }
             size={14}
             color={getStatusColor()}
@@ -119,8 +119,8 @@ export function AssetCard({ asset }: AssetCardProps) {
             <Ionicons
               name={
                 asset.reminderEnabled
-                  ? "notifications"
-                  : "notifications-outline"
+                  ? 'notifications'
+                  : 'notifications-outline'
               }
               size={18}
               color={
@@ -164,17 +164,17 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 12,
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: "rgba(0,0,0,0.05)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.05)',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 12,
   },
   info: {
@@ -182,16 +182,16 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
     marginBottom: 2,
   },
   brand: {
     fontSize: 14,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   statusBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   divider: {
     height: 1,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   warrantyRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
     marginBottom: 16,
   },
@@ -217,37 +217,37 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 11,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     marginBottom: 4,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   value: {
     fontSize: 14,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 16,
   },
   actionIcon: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   actionLabel: {
     fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   editBtn: {
     width: 36,
     height: 36,
     borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

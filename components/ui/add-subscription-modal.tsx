@@ -1,18 +1,19 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
-} from "react-native";
-import { ThemedText } from "../themed-text";
-import { AuthButton } from "./auth-button";
-import { AuthInput } from "./auth-input";
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { ThemedText } from '../themed-text';
+import { AuthInput } from './auth-input';
+import { ModalActionButtons } from './modal-action-buttons';
 
 interface AddSubscriptionModalProps {
   visible: boolean;
@@ -20,7 +21,7 @@ interface AddSubscriptionModalProps {
   onAdd: (subscription: {
     name: string;
     price: string;
-    billingCycle: "Monthly" | "Yearly";
+    billingCycle: 'Monthly' | 'Yearly';
     paymentMethod: string;
     startDate: string;
   }) => Promise<void>;
@@ -32,21 +33,21 @@ export function AddSubscriptionModal({
   onAdd,
 }: AddSubscriptionModalProps) {
   const { theme } = useAppTheme();
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [billingCycle, setBillingCycle] = useState<"Monthly" | "Yearly">(
-    "Monthly",
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [billingCycle, setBillingCycle] = useState<'Monthly' | 'Yearly'>(
+    'Monthly'
   );
-  const [paymentMethod, setPaymentMethod] = useState("");
-  const [startDate, setStartDate] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
-    setName("");
-    setPrice("");
-    setBillingCycle("Monthly");
-    setPaymentMethod("");
-    setStartDate("");
+    setName('');
+    setPrice('');
+    setBillingCycle('Monthly');
+    setPaymentMethod('');
+    setStartDate('');
   };
 
   const handleAdd = async () => {
@@ -56,13 +57,13 @@ export function AddSubscriptionModal({
       !paymentMethod.trim() ||
       !startDate.trim()
     ) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
     const priceNum = parseFloat(price);
     if (isNaN(priceNum) || priceNum <= 0) {
-      Alert.alert("Error", "Please enter a valid price");
+      Alert.alert('Error', 'Please enter a valid price');
       return;
     }
 
@@ -78,7 +79,7 @@ export function AddSubscriptionModal({
       resetForm();
       onClose();
     } catch {
-      Alert.alert("Error", "Failed to add subscription");
+      Alert.alert('Error', 'Failed to add subscription');
     } finally {
       setIsLoading(false);
     }
@@ -100,7 +101,7 @@ export function AddSubscriptionModal({
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <View style={[styles.container, { backgroundColor: theme.background }]}>
           <ScrollView
@@ -154,13 +155,13 @@ export function AddSubscriptionModal({
                       styles.cycleButton,
                       {
                         backgroundColor:
-                          billingCycle === "Monthly"
+                          billingCycle === 'Monthly'
                             ? theme.primary
                             : theme.secondary,
                         borderColor: theme.border,
                       },
                     ]}
-                    onPress={() => setBillingCycle("Monthly")}
+                    onPress={() => setBillingCycle('Monthly')}
                   >
                     <ThemedText
                       type="default"
@@ -168,7 +169,7 @@ export function AddSubscriptionModal({
                         styles.cycleButtonText,
                         {
                           color:
-                            billingCycle === "Monthly"
+                            billingCycle === 'Monthly'
                               ? theme.primaryForeground
                               : theme.secondaryForeground,
                         },
@@ -182,13 +183,13 @@ export function AddSubscriptionModal({
                       styles.cycleButton,
                       {
                         backgroundColor:
-                          billingCycle === "Yearly"
+                          billingCycle === 'Yearly'
                             ? theme.primary
                             : theme.secondary,
                         borderColor: theme.border,
                       },
                     ]}
-                    onPress={() => setBillingCycle("Yearly")}
+                    onPress={() => setBillingCycle('Yearly')}
                   >
                     <ThemedText
                       type="default"
@@ -196,7 +197,7 @@ export function AddSubscriptionModal({
                         styles.cycleButtonText,
                         {
                           color:
-                            billingCycle === "Yearly"
+                            billingCycle === 'Yearly'
                               ? theme.primaryForeground
                               : theme.secondaryForeground,
                         },
@@ -227,33 +228,11 @@ export function AddSubscriptionModal({
               />
             </View>
 
-            <View style={styles.buttonContainer}>
-              <Pressable
-                style={[
-                  styles.cancelButton,
-                  {
-                    backgroundColor: theme.secondary,
-                    borderColor: theme.border,
-                  },
-                ]}
-                onPress={handleClose}
-              >
-                <ThemedText
-                  type="default"
-                  style={[
-                    styles.cancelButtonText,
-                    { color: theme.secondaryForeground },
-                  ]}
-                >
-                  Cancel
-                </ThemedText>
-              </Pressable>
-              <AuthButton
-                title="Add Subscription"
-                onPress={handleAdd}
-                isLoading={isLoading}
-              />
-            </View>
+            <ModalActionButtons
+              onCancel={handleClose}
+              onAdd={handleAdd}
+              isLoading={isLoading}
+            />
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
@@ -274,7 +253,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   subtitle: {
@@ -289,10 +268,10 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   cycleButtons: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   cycleButton: {
@@ -301,30 +280,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 12,
     borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   cycleButtonText: {
     fontSize: 16,
-    fontWeight: "600",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 12,
-    marginTop: 32,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });

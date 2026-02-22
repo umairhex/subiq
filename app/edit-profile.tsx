@@ -1,24 +1,24 @@
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    View,
-} from "react-native";
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  View,
+} from 'react-native';
 
-import { ThemedText } from "@/components/themed-text";
-import { AuthButton } from "@/components/ui/auth-button";
-import { AuthInput } from "@/components/ui/auth-input";
-import { useAppTheme } from "@/hooks/use-app-theme";
+import { ThemedText } from '@/components/themed-text';
+import { AuthButton } from '@/components/ui/auth-button';
+import { AuthInput } from '@/components/ui/auth-input';
+import { useAppTheme } from '@/hooks/use-app-theme';
 
 export default function EditProfileScreen() {
   const { theme } = useAppTheme();
 
-  const [firstName, setFirstName] = useState("John");
-  const [lastName, setLastName] = useState("Doe");
+  const [firstName, setFirstName] = useState('John');
+  const [lastName, setLastName] = useState('Doe');
 
   const handleSave = async () => {
     if (!firstName.trim() || !lastName.trim()) {
@@ -29,7 +29,7 @@ export default function EditProfileScreen() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       router.back();
     } catch (error) {
-      console.error("Failed to save profile:", error);
+      console.error('Failed to save profile:', error);
     }
   };
 
@@ -37,7 +37,7 @@ export default function EditProfileScreen() {
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
       <StatusBar style="auto" />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <ScrollView
@@ -50,7 +50,7 @@ export default function EditProfileScreen() {
                 type="title"
                 style={{
                   fontSize: 28,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   marginBottom: 8,
                   color: theme.foreground,
                 }}

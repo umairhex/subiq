@@ -1,14 +1,14 @@
-import { CurrencySelector } from "@/components/settings/currency-selector";
-import { SettingsItem } from "@/components/settings/settings-item";
-import { ThemedText } from "@/components/themed-text";
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { useCurrencyStore } from "@/stores/currency-store";
-import { useThemeStore } from "@/stores/theme-store";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { CurrencySelector } from '@/components/settings/currency-selector';
+import { SettingsItem } from '@/components/settings/settings-item';
+import { ThemedText } from '@/components/themed-text';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useCurrencyStore } from '@/stores/currency-store';
+import { useThemeStore } from '@/stores/theme-store';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -20,47 +20,47 @@ export default function SettingsScreen() {
 
   const toggleTheme = async () => {
     const newMode =
-      overrideTheme === "light"
-        ? "dark"
-        : overrideTheme === "dark"
-          ? "system"
-          : "light";
+      overrideTheme === 'light'
+        ? 'dark'
+        : overrideTheme === 'dark'
+          ? 'system'
+          : 'light';
     setTheme(newMode);
   };
   const getThemeSubtitle = () => {
     switch (overrideTheme) {
-      case "light":
-        return "Light";
-      case "dark":
-        return "Dark";
-      case "system":
-        return "System Default";
+      case 'light':
+        return 'Light';
+      case 'dark':
+        return 'Dark';
+      case 'system':
+        return 'System Default';
       default:
-        return "System Default";
+        return 'System Default';
     }
   };
 
   const getThemeIcon = () => {
     switch (overrideTheme) {
-      case "light":
-        return "sunny-outline";
-      case "dark":
-        return "moon-outline";
-      case "system":
-        return "contrast-outline";
+      case 'light':
+        return 'sunny-outline';
+      case 'dark':
+        return 'moon-outline';
+      case 'system':
+        return 'contrast-outline';
       default:
-        return "moon-outline";
+        return 'moon-outline';
     }
   };
 
   const handleLogout = () => {
-    router.replace("/");
+    router.replace('/');
   };
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
-      edges={["top"]}
+      edges={['top']}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
@@ -87,7 +87,7 @@ export default function SettingsScreen() {
           >
             <Pressable
               style={styles.profileHeader}
-              onPress={() => router.push("/edit-profile")}
+              onPress={() => router.push('/edit-profile')}
             >
               <View style={styles.profileMain}>
                 <View
@@ -95,7 +95,7 @@ export default function SettingsScreen() {
                     styles.avatarContainer,
                     {
                       borderColor: theme.border,
-                      backgroundColor: theme.muted + "20",
+                      backgroundColor: theme.muted + '20',
                     },
                   ]}
                 >
@@ -186,14 +186,14 @@ export default function SettingsScreen() {
             <SettingsItem
               icon="key-outline"
               title="Change Password"
-              onPress={() => router.push("/change-password")}
+              onPress={() => router.push('/change-password')}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
               icon="help-circle-outline"
               title="Forgot Password"
               subtitle="Reset your password"
-              onPress={() => router.push("/forgot-password")}
+              onPress={() => router.push('/forgot-password')}
             />
           </View>
         </View>
@@ -240,21 +240,21 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 2,
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
   profileHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 24,
     paddingVertical: 20,
     borderRadius: 12,
   },
   profileMain: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
     gap: 16,
   },
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   profileEmail: {
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 24,
     borderWidth: 1,
-    overflow: "hidden",
+    overflow: 'hidden',
     paddingVertical: 8,
   },
   divider: {
@@ -292,9 +292,9 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   logoutBtn: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     paddingVertical: 14,
     borderRadius: 16,

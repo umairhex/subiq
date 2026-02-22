@@ -1,13 +1,13 @@
-import { AssetCard } from "@/components/assets/asset-card";
-import { ThemedText } from "@/components/themed-text";
-import { AddAssetModal } from "@/components/ui/add-asset-modal";
-import { StatsCard } from "@/components/ui/stats-card";
-import { MOCK_ASSETS } from "@/constants/mock-data";
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { AssetCard } from '@/components/assets/asset-card';
+import { ThemedText } from '@/components/themed-text';
+import { AddAssetModal } from '@/components/ui/add-asset-modal';
+import { StatsCard } from '@/components/ui/stats-card';
+import { MOCK_ASSETS } from '@/constants/mock-data';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AssetsScreen() {
   const { theme } = useAppTheme();
@@ -20,14 +20,14 @@ export default function AssetsScreen() {
     purchaseDate: string;
     warrantyEnd: string;
   }): Promise<void> => {
-    console.log("LOG: Adding asset:", asset);
+    console.log('LOG: Adding asset:', asset);
     return new Promise<void>((resolve) => setTimeout(resolve, 1000));
   };
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
-      edges={["top"]}
+      edges={['top']}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -59,12 +59,12 @@ export default function AssetsScreen() {
         <StatsCard
           items={[
             {
-              label: "Total Assets",
-              value: "12 Items",
+              label: 'Total Assets',
+              value: '12 Items',
             },
             {
-              label: "In Warranty",
-              value: "8 Active",
+              label: 'In Warranty',
+              value: '8 Active',
             },
           ]}
         />
@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
     paddingHorizontal: 16,
     marginTop: 16,
     marginBottom: 20,
@@ -128,9 +128,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 16,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -139,8 +139,8 @@ const styles = StyleSheet.create({
   searchBar: {
     height: 48,
     borderRadius: 12,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     marginBottom: 24,
   },

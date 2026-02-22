@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import React from "react";
-import { StyleSheet, View } from "react-native";
-import { ThemedText } from "../themed-text";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ThemedText } from '../themed-text';
 
 export interface StatItem {
   label: string;
@@ -78,33 +78,33 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   row: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   item: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   label: {
     fontSize: 12,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 4,
   },
   value: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 2,
   },
   trend: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   divider: {
     width: 1,
     height: 40,
     marginHorizontal: 20,
-    backgroundColor: "rgba(0,0,0,0.15)",
+    backgroundColor: 'rgba(0,0,0,0.15)',
   },
 });

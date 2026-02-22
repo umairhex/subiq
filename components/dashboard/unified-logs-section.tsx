@@ -1,12 +1,12 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { AssetLog, AssetLogItem } from "../assets/asset-log-item";
-import { SubscriptionLog, SubscriptionLogItem } from "./subscription-log-item";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { AssetLog, AssetLogItem } from '../assets/asset-log-item';
+import { SubscriptionLog, SubscriptionLogItem } from './subscription-log-item';
 
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "../themed-text";
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ThemedText } from '../themed-text';
 
-type LogType = "all" | "assets" | "subscriptions";
+type LogType = 'all' | 'assets' | 'subscriptions';
 
 interface UnifiedLogsSectionProps {
   assetLogs: AssetLog[];
@@ -18,26 +18,26 @@ export function UnifiedLogsSection({
   subscriptionLogs,
 }: UnifiedLogsSectionProps) {
   const { theme } = useAppTheme();
-  const [activeFilter, setActiveFilter] = useState<LogType>("all");
+  const [activeFilter, setActiveFilter] = useState<LogType>('all');
 
   const getFilteredLogs = () => {
     switch (activeFilter) {
-      case "assets":
-        return assetLogs.map((log) => ({ ...log, type: "asset" as const }));
-      case "subscriptions":
+      case 'assets':
+        return assetLogs.map((log) => ({ ...log, type: 'asset' as const }));
+      case 'subscriptions':
         return subscriptionLogs.map((log) => ({
           ...log,
-          type: "subscription" as const,
+          type: 'subscription' as const,
         }));
       default:
         return [
-          ...assetLogs.map((log) => ({ ...log, type: "asset" as const })),
+          ...assetLogs.map((log) => ({ ...log, type: 'asset' as const })),
           ...subscriptionLogs.map((log) => ({
             ...log,
-            type: "subscription" as const,
+            type: 'subscription' as const,
           })),
         ].sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
     }
   };
@@ -49,7 +49,7 @@ export function UnifiedLogsSection({
   }
 
   const renderLogItem = (log: any) => {
-    if (log.type === "asset") {
+    if (log.type === 'asset') {
       return <AssetLogItem key={`asset-${log.id}`} log={log} />;
     } else {
       return <SubscriptionLogItem key={`subscription-${log.id}`} log={log} />;
@@ -69,9 +69,9 @@ export function UnifiedLogsSection({
 
       <View style={styles.filterContainer}>
         {[
-          { key: "all", label: "All" },
-          { key: "assets", label: "Assets" },
-          { key: "subscriptions", label: "Subscriptions" },
+          { key: 'all', label: 'All' },
+          { key: 'assets', label: 'Assets' },
+          { key: 'subscriptions', label: 'Subscriptions' },
         ].map((filter) => (
           <TouchableOpacity
             key={filter.key}
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   filterContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 16,
     gap: 6,
   },
@@ -137,13 +137,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: 32,
   },
   filterText: {
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   logsContainer: {
     borderWidth: 1,

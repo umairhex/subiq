@@ -1,8 +1,8 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import { Tabs } from "expo-router";
-import React from "react";
-import { Platform } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import React from 'react';
+import { Platform } from 'react-native';
 
 export default function TabLayout() {
   const { theme } = useAppTheme();
@@ -16,26 +16,26 @@ export default function TabLayout() {
         tabBarStyle: {
           backgroundColor: theme.card,
           borderTopColor: theme.border,
-          height: Platform.OS === "ios" ? 88 : 68,
-          paddingBottom: Platform.OS === "ios" ? 30 : 12,
+          height: Platform.OS === 'ios' ? 88 : 68,
+          paddingBottom: Platform.OS === 'ios' ? 30 : 12,
           paddingTop: 12,
           shadowOpacity: 0,
           elevation: 0,
         },
         tabBarLabelStyle: {
-          fontFamily: "Inter",
+          fontFamily: 'Inter',
           fontSize: 12,
-          fontWeight: "500",
+          fontWeight: '500',
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Dashboard",
+          title: 'Dashboard',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "grid" : "grid-outline"}
+              name={focused ? 'grid' : 'grid-outline'}
               size={24}
               color={color}
             />
@@ -45,10 +45,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="assets"
         options={{
-          title: "Assets",
+          title: 'Assets',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "cube" : "cube-outline"}
+              name={focused ? 'cube' : 'cube-outline'}
               size={24}
               color={color}
             />
@@ -58,10 +58,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="activity"
         options={{
-          title: "Activity",
+          title: 'Activity',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "stats-chart" : "stats-chart-outline"}
+              name={focused ? 'stats-chart' : 'stats-chart-outline'}
               size={24}
               color={color}
             />
@@ -71,10 +71,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={focused ? "settings" : "settings-outline"}
+              name={focused ? 'settings' : 'settings-outline'}
               size={24}
               color={color}
             />

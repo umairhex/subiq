@@ -1,13 +1,13 @@
-import { ThemedText } from "@/components/themed-text";
-import { useAppTheme } from "@/hooks/use-app-theme";
+import { ThemedText } from '@/components/themed-text';
+import { useAppTheme } from '@/hooks/use-app-theme';
 import {
-    CURRENCIES,
-    Currency,
-    useCurrencyStore,
-} from "@/stores/currency-store";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
+  CURRENCIES,
+  Currency,
+  useCurrencyStore,
+} from '@/stores/currency-store';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 interface CurrencySelectorProps {
   visible: boolean;
@@ -102,19 +102,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.1)",
+    borderBottomColor: 'rgba(0,0,0,0.1)',
   },
   closeButton: {
     width: 40,
     height: 40,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
@@ -123,9 +123,9 @@ const styles = StyleSheet.create({
     width: 40,
   },
   currencyItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 16,
     marginHorizontal: 16,
     marginVertical: 4,
@@ -133,8 +133,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   currencyInfo: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     flex: 1,
   },
   flag: {

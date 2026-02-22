@@ -1,20 +1,20 @@
-import { ExpenseSummary } from "@/components/dashboard/expense-summary";
-import { RecommendationEngine } from "@/components/dashboard/recommendation-engine";
-import { SubscriptionCard } from "@/components/dashboard/subscription-card";
-import { UnifiedLogsSection } from "@/components/dashboard/unified-logs-section";
-import { ThemedText } from "@/components/themed-text";
-import { AddSubscriptionModal } from "@/components/ui/add-subscription-modal";
+import { ExpenseSummary } from '@/components/dashboard/expense-summary';
+import { RecommendationEngine } from '@/components/dashboard/recommendation-engine';
+import { SubscriptionCard } from '@/components/dashboard/subscription-card';
+import { UnifiedLogsSection } from '@/components/dashboard/unified-logs-section';
+import { ThemedText } from '@/components/themed-text';
+import { AddSubscriptionModal } from '@/components/ui/add-subscription-modal';
 import {
-    MOCK_ASSET_LOGS,
-    MOCK_RECOMMENDATIONS,
-    MOCK_SUBSCRIPTION_LOGS,
-    MOCK_SUBSCRIPTIONS,
-} from "@/constants/mock-data";
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+  MOCK_ASSET_LOGS,
+  MOCK_RECOMMENDATIONS,
+  MOCK_SUBSCRIPTION_LOGS,
+  MOCK_SUBSCRIPTIONS,
+} from '@/constants/mock-data';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DashboardScreen() {
   const { theme } = useAppTheme();
@@ -23,18 +23,18 @@ export default function DashboardScreen() {
   const handleAddSubscription = async (subscription: {
     name: string;
     price: string;
-    billingCycle: "Monthly" | "Yearly";
+    billingCycle: 'Monthly' | 'Yearly';
     paymentMethod: string;
     startDate: string;
   }): Promise<void> => {
-    console.log("LOG: Adding subscription:", subscription);
+    console.log('LOG: Adding subscription:', subscription);
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
-      edges={["top"]}
+      edges={['top']}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -103,9 +103,9 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   userHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 16,
     marginBottom: 16,
   },
@@ -113,9 +113,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   sectionTitle: {
@@ -125,14 +125,14 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   fab: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 24,
     right: 24,
     width: 56,
     height: 56,
     borderRadius: 28,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     elevation: 8,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,

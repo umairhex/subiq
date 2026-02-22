@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
 
 interface AuthButtonProps {
   title: string;
@@ -50,9 +50,9 @@ export function AuthButton({ title, onPress, isLoading }: AuthButtonProps) {
 
 const styles = StyleSheet.create({
   submitButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 64,
     borderRadius: 16,
     marginTop: 12,
@@ -63,8 +63,8 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     fontSize: 18,
-    fontWeight: "bold",
-    fontFamily: "Inter-Bold",
+    fontWeight: 'bold',
+    fontFamily: 'Inter-Bold',
   },
   buttonArrow: {
     marginLeft: 8,

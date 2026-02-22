@@ -1,18 +1,18 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
-} from "react-native";
-import { ThemedText } from "../themed-text";
-import { AuthButton } from "./auth-button";
-import { AuthInput } from "./auth-input";
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { ThemedText } from '../themed-text';
+import { AuthInput } from './auth-input';
+import { ModalActionButtons } from './modal-action-buttons';
 
 interface AddAssetModalProps {
   visible: boolean;
@@ -27,17 +27,17 @@ interface AddAssetModalProps {
 
 export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
   const { theme } = useAppTheme();
-  const [name, setName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [purchaseDate, setPurchaseDate] = useState("");
-  const [warrantyEnd, setWarrantyEnd] = useState("");
+  const [name, setName] = useState('');
+  const [brand, setBrand] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
+  const [warrantyEnd, setWarrantyEnd] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
-    setName("");
-    setBrand("");
-    setPurchaseDate("");
-    setWarrantyEnd("");
+    setName('');
+    setBrand('');
+    setPurchaseDate('');
+    setWarrantyEnd('');
   };
 
   const handleAdd = async () => {
@@ -47,7 +47,7 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
       !purchaseDate.trim() ||
       !warrantyEnd.trim()
     ) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
@@ -62,7 +62,7 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
       resetForm();
       onClose();
     } catch {
-      Alert.alert("Error", "Failed to add asset");
+      Alert.alert('Error', 'Failed to add asset');
     } finally {
       setIsLoading(false);
     }
@@ -81,7 +81,7 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
       onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -140,33 +140,11 @@ export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
               />
             </View>
 
-            <View style={styles.buttonContainer}>
-              <Pressable
-                style={[
-                  styles.cancelButton,
-                  {
-                    backgroundColor: theme.secondary,
-                    borderColor: theme.border,
-                  },
-                ]}
-                onPress={handleClose}
-              >
-                <ThemedText
-                  type="default"
-                  style={[
-                    styles.cancelButtonText,
-                    { color: theme.secondaryForeground },
-                  ]}
-                >
-                  Cancel
-                </ThemedText>
-              </Pressable>
-              <AuthButton
-                title="Add Asset"
-                onPress={handleAdd}
-                isLoading={isLoading}
-              />
-            </View>
+            <ModalActionButtons
+              onCancel={handleClose}
+              onAdd={handleAdd}
+              isLoading={isLoading}
+            />
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
@@ -187,7 +165,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   subtitle: {
@@ -196,24 +174,5 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
     gap: 20,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 12,
-    marginTop: 32,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

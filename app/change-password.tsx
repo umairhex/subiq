@@ -1,28 +1,28 @@
-import { ThemedText } from "@/components/themed-text";
-import { AuthButton } from "@/components/ui/auth-button";
-import { AuthInput } from "@/components/ui/auth-input";
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import { ThemedText } from '@/components/themed-text';
+import { AuthButton } from '@/components/ui/auth-button';
+import { AuthInput } from '@/components/ui/auth-input';
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
   const { theme } = useAppTheme();
 
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] =
     useState(false);
@@ -32,29 +32,29 @@ export default function ChangePasswordScreen() {
 
   const validatePasswords = () => {
     if (!currentPassword.trim()) {
-      Alert.alert("Error", "Please enter your current password");
+      Alert.alert('Error', 'Please enter your current password');
       return false;
     }
 
     if (!newPassword.trim()) {
-      Alert.alert("Error", "Please enter a new password");
+      Alert.alert('Error', 'Please enter a new password');
       return false;
     }
 
     if (newPassword.length < 8) {
-      Alert.alert("Error", "New password must be at least 8 characters long");
+      Alert.alert('Error', 'New password must be at least 8 characters long');
       return false;
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert("Error", "New passwords do not match");
+      Alert.alert('Error', 'New passwords do not match');
       return false;
     }
 
     if (currentPassword === newPassword) {
       Alert.alert(
-        "Error",
-        "New password must be different from current password",
+        'Error',
+        'New password must be different from current password'
       );
       return false;
     }
@@ -69,9 +69,9 @@ export default function ChangePasswordScreen() {
 
     setTimeout(() => {
       setIsLoading(false);
-      Alert.alert("Success", "Your password has been changed successfully!", [
+      Alert.alert('Success', 'Your password has been changed successfully!', [
         {
-          text: "OK",
+          text: 'OK',
           onPress: () => router.back(),
         },
       ]);
@@ -85,11 +85,11 @@ export default function ChangePasswordScreen() {
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: theme.background }}
-      edges={["top"]}
+      edges={['top']}
     >
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
         <ScrollView
           contentContainerStyle={styles.scrollContent}
@@ -108,7 +108,7 @@ export default function ChangePasswordScreen() {
             <View
               style={[
                 styles.iconContainer,
-                { backgroundColor: theme.primary + "20" },
+                { backgroundColor: theme.primary + '20' },
               ]}
             >
               <Ionicons name="key" size={48} color={theme.primary} />
@@ -223,38 +223,38 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "flex-start",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
   },
   content: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingBottom: 40,
   },
   iconContainer: {
     width: 96,
     height: 96,
     borderRadius: 48,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 32,
   },
   title: {
     fontSize: 28,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 16,
   },
   description: {
     fontSize: 16,
-    textAlign: "center",
+    textAlign: 'center',
     lineHeight: 24,
     marginBottom: 32,
     paddingHorizontal: 20,
   },
   form: {
-    width: "100%",
+    width: '100%',
   },
   passwordRequirements: {
     marginTop: 16,
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   },
   requirementTitle: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 8,
   },
   requirementText: {
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   buttonContainer: {
-    width: "100%",
+    width: '100%',
     marginTop: 24,
   },
 });

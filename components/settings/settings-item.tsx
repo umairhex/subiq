@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 interface SettingsItemProps {
   icon: keyof typeof Ionicons.glyphMap;
@@ -28,7 +28,7 @@ export function SettingsItem({
       onPress={onPress}
       style={({ pressed }) => [
         styles.container,
-        { backgroundColor: pressed ? theme.input : "transparent" },
+        { backgroundColor: pressed ? theme.input : 'transparent' },
       ]}
     >
       <View
@@ -36,7 +36,7 @@ export function SettingsItem({
           styles.iconContainer,
           {
             backgroundColor: destructive
-              ? "rgba(239, 68, 68, 0.1)"
+              ? 'rgba(239, 68, 68, 0.1)'
               : theme.input,
           },
         ]}
@@ -64,8 +64,8 @@ export function SettingsItem({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderRadius: 16,
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginRight: 16,
   },
   content: {
@@ -84,11 +84,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   subtitle: {
     fontSize: 13,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     marginTop: 2,
   },
 });

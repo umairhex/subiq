@@ -1,14 +1,14 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
 import {
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TextInputProps,
-    View,
-} from "react-native";
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native';
 
 interface AuthInputProps extends TextInputProps {
   label: string;
@@ -51,7 +51,7 @@ export function AuthInput({
         {showPasswordToggle && (
           <Pressable onPress={onTogglePassword}>
             <Ionicons
-              name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+              name={isPasswordVisible ? 'eye-off-outline' : 'eye-outline'}
               size={20}
               color={theme.mutedForeground}
             />
@@ -69,13 +69,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter",
+    fontWeight: '600',
+    fontFamily: 'Inter',
     marginLeft: 4,
   },
   inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     borderWidth: 1,
     borderRadius: 16,
     paddingHorizontal: 16,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    fontFamily: "Inter",
-    height: "100%",
+    fontFamily: 'Inter',
+    height: '100%',
   },
 });

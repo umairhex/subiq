@@ -1,17 +1,17 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    StyleSheet,
-    View,
-} from "react-native";
-import { ThemedText } from "../themed-text";
-import { AuthButton } from "./auth-button";
-import { AuthInput } from "./auth-input";
+  Alert,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { ThemedText } from '../themed-text';
+import { AuthInput } from './auth-input';
+import { ModalActionButtons } from './modal-action-buttons';
 
 interface AddActivityModalProps {
   visible: boolean;
@@ -29,20 +29,20 @@ export function AddActivityModal({
   onAdd,
 }: AddActivityModalProps) {
   const { theme } = useAppTheme();
-  const [platform, setPlatform] = useState("");
-  const [activityName, setActivityName] = useState("");
-  const [duration, setDuration] = useState("");
+  const [platform, setPlatform] = useState('');
+  const [activityName, setActivityName] = useState('');
+  const [duration, setDuration] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
-    setPlatform("");
-    setActivityName("");
-    setDuration("");
+    setPlatform('');
+    setActivityName('');
+    setDuration('');
   };
 
   const handleAdd = async () => {
     if (!platform.trim() || !activityName.trim() || !duration.trim()) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
@@ -56,7 +56,7 @@ export function AddActivityModal({
       resetForm();
       onClose();
     } catch {
-      Alert.alert("Error", "Failed to add activity");
+      Alert.alert('Error', 'Failed to add activity');
     } finally {
       setIsLoading(false);
     }
@@ -75,7 +75,7 @@ export function AddActivityModal({
       onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{ flex: 1 }}
       >
         <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -122,30 +122,11 @@ export function AddActivityModal({
             />
           </View>
 
-          <View style={styles.buttonContainer}>
-            <Pressable
-              style={[
-                styles.cancelButton,
-                { backgroundColor: theme.secondary, borderColor: theme.border },
-              ]}
-              onPress={handleClose}
-            >
-              <ThemedText
-                type="default"
-                style={[
-                  styles.cancelButtonText,
-                  { color: theme.secondaryForeground },
-                ]}
-              >
-                Cancel
-              </ThemedText>
-            </Pressable>
-            <AuthButton
-              title="Add Activity"
-              onPress={handleAdd}
-              isLoading={isLoading}
-            />
-          </View>
+          <ModalActionButtons
+            onCancel={handleClose}
+            onAdd={handleAdd}
+            isLoading={isLoading}
+          />
         </View>
       </KeyboardAvoidingView>
     </Modal>
@@ -162,7 +143,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
   },
   subtitle: {
@@ -171,24 +152,5 @@ const styles = StyleSheet.create({
   form: {
     flex: 1,
     gap: 20,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    gap: 12,
-    marginTop: 32,
-  },
-  cancelButton: {
-    flex: 1,
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  cancelButtonText: {
-    fontSize: 16,
-    fontWeight: "600",
   },
 });

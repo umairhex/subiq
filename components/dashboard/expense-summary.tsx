@@ -1,8 +1,8 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { useCurrencyStore } from "@/stores/currency-store";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useCurrencyStore } from '@/stores/currency-store';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface ExpenseSummaryProps {
   totalMonthly: number;
@@ -45,7 +45,7 @@ export function ExpenseSummary({
         </View>
         <View style={styles.trendRow}>
           <Ionicons
-            name={isTrendUp ? "trending-up" : "trending-down"}
+            name={isTrendUp ? 'trending-up' : 'trending-down'}
             size={16}
             color={isTrendUp ? theme.destructive : theme.primary}
           />
@@ -90,14 +90,14 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   titleRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   icon: {
@@ -105,37 +105,37 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontFamily: "Inter",
-    fontWeight: "600",
+    fontFamily: 'Inter',
+    fontWeight: '600',
   },
   trendRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   trendText: {
     fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   amount: {
     fontSize: 32,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
     marginBottom: 16,
   },
   yearlyBox: {
     padding: 12,
     borderRadius: 12,
     borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   yearlyLabel: {
     fontSize: 13,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   yearlyAmount: {
     fontSize: 16,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
 });

@@ -1,7 +1,7 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { Ionicons } from "@expo/vector-icons";
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 interface LogItemProps {
   title: string;
@@ -12,7 +12,7 @@ interface LogItemProps {
 
   details?: string;
 
-  getActionColor: (theme: ReturnType<typeof useAppTheme>["theme"]) => string;
+  getActionColor: (theme: ReturnType<typeof useAppTheme>['theme']) => string;
 
   getActionIcon: () => keyof typeof Ionicons.glyphMap;
 }
@@ -73,7 +73,7 @@ export function LogItem({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     borderRadius: 12,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 1 },
@@ -92,28 +92,28 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   actionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   actionIcon: {
     marginRight: 6,
   },
   action: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   date: {
     fontSize: 12,
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   details: {

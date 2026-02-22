@@ -1,19 +1,19 @@
-import { useAppTheme } from "@/hooks/use-app-theme";
-import { useCurrencyStore } from "@/stores/currency-store";
-import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import { useAppTheme } from '@/hooks/use-app-theme';
+import { useCurrencyStore } from '@/stores/currency-store';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
 import {
-    LayoutAnimation,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    UIManager,
-    View,
-} from "react-native";
+  LayoutAnimation,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  UIManager,
+  View,
+} from 'react-native';
 
 if (
-  Platform.OS === "android" &&
+  Platform.OS === 'android' &&
   UIManager.setLayoutAnimationEnabledExperimental
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -21,7 +21,7 @@ if (
 
 export interface Recommendation {
   id: string;
-  type: "Duplicate" | "Inactive" | "Trial";
+  type: 'Duplicate' | 'Inactive' | 'Trial';
   title: string;
   description: string;
   savings: number;
@@ -42,17 +42,17 @@ export function RecommendationEngine({
   const toggleExpand = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
     );
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "Duplicate":
+      case 'Duplicate':
         return theme.destructive;
-      case "Inactive":
+      case 'Inactive':
         return theme.mutedForeground;
-      case "Trial":
+      case 'Trial':
         return theme.warning;
       default:
         return theme.primary;
@@ -80,92 +80,86 @@ export function RecommendationEngine({
               {
                 backgroundColor: theme.card,
                 borderColor: theme.border,
+                borderLeftColor: typeColor,
                 shadowColor: theme.foreground,
                 elevation: 2,
               },
             ]}
           >
-            <View style={styles.badgeRow}>
-              <View
-                style={[
-                  styles.typeBadge,
-                  { backgroundColor: typeColor + "20", borderColor: typeColor },
-                ]}
-              >
-                <Text style={[styles.typeText, { color: typeColor }]}>
-                  {rec.type}
+            <View style={styles.cardContent}>
+              <View style={styles.headerRow}>
+                <Text style={[styles.recTitle, { color: theme.foreground }]}>
+                  {rec.title}
                 </Text>
-              </View>
-              <View style={styles.rightHeader}>
-                <View style={styles.scoreRow}>
-                  <Text
-                    style={[
-                      styles.scoreLabel,
-                      { color: theme.mutedForeground },
-                    ]}
-                  >
-                    Confidence
-                  </Text>
-                  <Text
-                    style={[styles.scoreValue, { color: theme.foreground }]}
-                  >
-                    {rec.confidence}%
-                  </Text>
-                </View>
-                <Ionicons
-                  name={isExpanded ? "chevron-up" : "chevron-down"}
-                  size={18}
-                  color={theme.mutedForeground}
-                  style={{ marginLeft: 8 }}
-                />
-              </View>
-            </View>
-
-            <Text style={[styles.recTitle, { color: theme.foreground }]}>
-              {rec.title}
-            </Text>
-
-            {isExpanded && (
-              <View style={styles.expandedContent}>
-                <Text
-                  style={[styles.recDesc, { color: theme.mutedForeground }]}
-                >
-                  {rec.description}
-                </Text>
-
-                <View style={styles.footer}>
-                  <View>
+                <View style={styles.rightHeader}>
+                  <View style={styles.scoreRow}>
                     <Text
                       style={[
-                        styles.saveLabel,
+                        styles.scoreLabel,
                         { color: theme.mutedForeground },
                       ]}
                     >
-                      Potential Savings
+                      Confidence
                     </Text>
-                    <Text style={[styles.saveAmount, { color: theme.primary }]}>
-                      {currency.symbol}
-                      {rec.savings}/mo
+                    <Text
+                      style={[styles.scoreValue, { color: theme.foreground }]}
+                    >
+                      {rec.confidence}%
                     </Text>
                   </View>
-                  <Pressable
-                    style={[
-                      styles.actionBtn,
-                      { backgroundColor: theme.primary },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        styles.actionText,
-                        { color: theme.primaryForeground },
-                      ]}
-                    >
-                      Review
-                    </Text>
-                  </Pressable>
+                  <Ionicons
+                    name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                    size={18}
+                    color={theme.mutedForeground}
+                    style={{ marginLeft: 8 }}
+                  />
                 </View>
               </View>
-            )}
+
+              {isExpanded && (
+                <View style={styles.expandedContent}>
+                  <Text
+                    style={[styles.recDesc, { color: theme.mutedForeground }]}
+                  >
+                    {rec.description}
+                  </Text>
+
+                  <View style={styles.footer}>
+                    <View>
+                      <Text
+                        style={[
+                          styles.saveLabel,
+                          { color: theme.mutedForeground },
+                        ]}
+                      >
+                        Potential Savings
+                      </Text>
+                      <Text
+                        style={[styles.saveAmount, { color: theme.primary }]}
+                      >
+                        {currency.symbol}
+                        {rec.savings}/mo
+                      </Text>
+                    </View>
+                    <Pressable
+                      style={[
+                        styles.actionBtn,
+                        { backgroundColor: theme.primary },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.actionText,
+                          { color: theme.primaryForeground },
+                        ]}
+                      >
+                        Review
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+              )}
+            </View>
           </Pressable>
         );
       })}
@@ -178,82 +172,78 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
     marginBottom: 12,
   },
   title: {
     fontSize: 18,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   card: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     padding: 16,
     borderRadius: 20,
     borderWidth: 1,
+    borderLeftWidth: 4,
     marginBottom: 12,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 6,
   },
-  badgeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  cardContent: {
+    flex: 1,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   rightHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  typeBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    borderWidth: 1,
-  },
-  typeText: {
-    fontSize: 12,
-    fontFamily: "Inter-Bold",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   scoreRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   scoreLabel: {
     fontSize: 12,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   scoreValue: {
     fontSize: 12,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   recTitle: {
     fontSize: 14,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   expandedContent: {
     marginTop: 8,
   },
   recDesc: {
     fontSize: 13,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
     lineHeight: 18,
     marginBottom: 12,
   },
   footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   saveLabel: {
     fontSize: 11,
-    fontFamily: "Inter",
+    fontFamily: 'Inter',
   },
   saveAmount: {
     fontSize: 14,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
   actionBtn: {
     paddingHorizontal: 16,
@@ -262,6 +252,6 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 13,
-    fontFamily: "Inter-Bold",
+    fontFamily: 'Inter-Bold',
   },
 });
