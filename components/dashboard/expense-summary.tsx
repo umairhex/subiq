@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useCurrencyStore } from "@/stores/currency-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -7,15 +8,14 @@ interface ExpenseSummaryProps {
   totalMonthly: number;
   totalYearly: number;
   trendPercentage: number;
-  theme: any;
 }
 
 export function ExpenseSummary({
   totalMonthly,
   totalYearly,
   trendPercentage,
-  theme,
 }: ExpenseSummaryProps) {
+  const { theme } = useAppTheme();
   const isTrendUp = trendPercentage > 0;
   const { currency } = useCurrencyStore();
 

@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -8,7 +9,6 @@ interface SettingsItemProps {
   subtitle?: string;
   onPress?: () => void;
   destructive?: boolean;
-  theme: any;
   showChevron?: boolean;
 }
 
@@ -18,9 +18,9 @@ export function SettingsItem({
   subtitle,
   onPress,
   destructive,
-  theme,
   showChevron = true,
 }: SettingsItemProps) {
+  const { theme } = useAppTheme();
   const color = destructive ? theme.destructive : theme.foreground;
 
   return (

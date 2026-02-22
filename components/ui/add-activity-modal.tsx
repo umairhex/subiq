@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import React, { useState } from "react";
 import {
     Alert,
@@ -19,20 +20,25 @@ interface AddActivityModalProps {
     platform: string;
     activityName: string;
     duration: string;
-  }) => void;
-  theme: any;
+  }) => Promise<void>;
 }
 
 export function AddActivityModal({
   visible,
   onClose,
   onAdd,
-  theme,
 }: AddActivityModalProps) {
+  const { theme } = useAppTheme();
   const [platform, setPlatform] = useState("");
   const [activityName, setActivityName] = useState("");
   const [duration, setDuration] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const resetForm = () => {
+    setPlatform("");
+    setActivityName("");
+    setDuration("");
+  };
 
   const handleAdd = async () => {
     if (!platform.trim() || !activityName.trim() || !duration.trim()) {
@@ -47,13 +53,9 @@ export function AddActivityModal({
         activityName: activityName.trim(),
         duration: duration.trim(),
       });
-
-      // Reset form
-      setPlatform("");
-      setActivityName("");
-      setDuration("");
+      resetForm();
       onClose();
-    } catch (_error) {
+    } catch {
       Alert.alert("Error", "Failed to add activity");
     } finally {
       setIsLoading(false);
@@ -61,9 +63,7 @@ export function AddActivityModal({
   };
 
   const handleClose = () => {
-    setPlatform("");
-    setActivityName("");
-    setDuration("");
+    resetForm();
     onClose();
   };
 
@@ -79,7 +79,6 @@ export function AddActivityModal({
         style={{ flex: 1 }}
       >
         <View style={[styles.container, { backgroundColor: theme.background }]}>
-          {/* Header */}
           <View style={styles.header}>
             <ThemedText
               type="title"
@@ -95,7 +94,6 @@ export function AddActivityModal({
             </ThemedText>
           </View>
 
-          {/* Form */}
           <View style={styles.form}>
             <AuthInput
               label="Platform"
@@ -104,7 +102,6 @@ export function AddActivityModal({
               value={platform}
               onChangeText={setPlatform}
               autoCapitalize="words"
-              theme={theme}
             />
 
             <AuthInput
@@ -114,7 +111,6 @@ export function AddActivityModal({
               value={activityName}
               onChangeText={setActivityName}
               autoCapitalize="sentences"
-              theme={theme}
             />
 
             <AuthInput
@@ -123,11 +119,9 @@ export function AddActivityModal({
               placeholder="e.g., 2h 30m, 45m"
               value={duration}
               onChangeText={setDuration}
-              theme={theme}
             />
           </View>
 
-          {/* Buttons */}
           <View style={styles.buttonContainer}>
             <Pressable
               style={[
@@ -149,7 +143,6 @@ export function AddActivityModal({
             <AuthButton
               title="Add Activity"
               onPress={handleAdd}
-              theme={theme}
               isLoading={isLoading}
             />
           </View>

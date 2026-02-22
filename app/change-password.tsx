@@ -1,8 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { AuthButton } from "@/components/ui/auth-button";
 import { AuthInput } from "@/components/ui/auth-input";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -13,18 +12,13 @@ import {
     Pressable,
     ScrollView,
     StyleSheet,
-    useColorScheme,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ChangePasswordScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
+  const { theme } = useAppTheme();
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -146,7 +140,6 @@ export default function ChangePasswordScreen() {
                 onTogglePassword={() =>
                   setIsCurrentPasswordVisible(!isCurrentPasswordVisible)
                 }
-                theme={theme}
               />
               <AuthInput
                 label="New Password"
@@ -159,7 +152,6 @@ export default function ChangePasswordScreen() {
                 onTogglePassword={() =>
                   setIsNewPasswordVisible(!isNewPasswordVisible)
                 }
-                theme={theme}
               />
 
               <AuthInput
@@ -173,7 +165,6 @@ export default function ChangePasswordScreen() {
                 onTogglePassword={() =>
                   setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
                 }
-                theme={theme}
               />
 
               <View style={styles.passwordRequirements}>
@@ -208,7 +199,6 @@ export default function ChangePasswordScreen() {
                   title="Update Password"
                   onPress={handleChangePassword}
                   isLoading={isLoading}
-                  theme={theme}
                 />
               </View>
             </View>

@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
@@ -6,15 +7,10 @@ interface AuthButtonProps {
   title: string;
   onPress: () => void;
   isLoading?: boolean;
-  theme: any;
 }
 
-export function AuthButton({
-  title,
-  onPress,
-  isLoading,
-  theme,
-}: AuthButtonProps) {
+export function AuthButton({ title, onPress, isLoading }: AuthButtonProps) {
+  const { theme } = useAppTheme();
   return (
     <Pressable
       style={[

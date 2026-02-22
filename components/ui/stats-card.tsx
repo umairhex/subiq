@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "../themed-text";
@@ -11,10 +12,10 @@ export interface StatItem {
 
 interface StatsCardProps {
   items: StatItem[];
-  theme: any;
 }
 
-export function StatsCard({ items, theme }: StatsCardProps) {
+export function StatsCard({ items }: StatsCardProps) {
+  const { theme } = useAppTheme();
   return (
     <View
       style={[

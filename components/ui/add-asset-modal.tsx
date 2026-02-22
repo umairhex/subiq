@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import React, { useState } from "react";
 import {
     Alert,
@@ -21,21 +22,23 @@ interface AddAssetModalProps {
     brand: string;
     purchaseDate: string;
     warrantyEnd: string;
-  }) => void;
-  theme: any;
+  }) => Promise<void>;
 }
 
-export function AddAssetModal({
-  visible,
-  onClose,
-  onAdd,
-  theme,
-}: AddAssetModalProps) {
+export function AddAssetModal({ visible, onClose, onAdd }: AddAssetModalProps) {
+  const { theme } = useAppTheme();
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [purchaseDate, setPurchaseDate] = useState("");
   const [warrantyEnd, setWarrantyEnd] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const resetForm = () => {
+    setName("");
+    setBrand("");
+    setPurchaseDate("");
+    setWarrantyEnd("");
+  };
 
   const handleAdd = async () => {
     if (
@@ -56,14 +59,9 @@ export function AddAssetModal({
         purchaseDate: purchaseDate.trim(),
         warrantyEnd: warrantyEnd.trim(),
       });
-
-      // Reset form
-      setName("");
-      setBrand("");
-      setPurchaseDate("");
-      setWarrantyEnd("");
+      resetForm();
       onClose();
-    } catch (_error) {
+    } catch {
       Alert.alert("Error", "Failed to add asset");
     } finally {
       setIsLoading(false);
@@ -71,10 +69,7 @@ export function AddAssetModal({
   };
 
   const handleClose = () => {
-    setName("");
-    setBrand("");
-    setPurchaseDate("");
-    setWarrantyEnd("");
+    resetForm();
     onClose();
   };
 
@@ -94,7 +89,6 @@ export function AddAssetModal({
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
-            {/* Header */}
             <View style={styles.header}>
               <ThemedText
                 type="title"
@@ -110,7 +104,6 @@ export function AddAssetModal({
               </ThemedText>
             </View>
 
-            {/* Form */}
             <View style={styles.form}>
               <AuthInput
                 label="Asset Name"
@@ -119,7 +112,6 @@ export function AddAssetModal({
                 value={name}
                 onChangeText={setName}
                 autoCapitalize="words"
-                theme={theme}
               />
 
               <AuthInput
@@ -129,7 +121,6 @@ export function AddAssetModal({
                 value={brand}
                 onChangeText={setBrand}
                 autoCapitalize="words"
-                theme={theme}
               />
 
               <AuthInput
@@ -138,7 +129,6 @@ export function AddAssetModal({
                 placeholder="e.g., Dec 15, 2023"
                 value={purchaseDate}
                 onChangeText={setPurchaseDate}
-                theme={theme}
               />
 
               <AuthInput
@@ -147,11 +137,9 @@ export function AddAssetModal({
                 placeholder="e.g., Dec 15, 2024"
                 value={warrantyEnd}
                 onChangeText={setWarrantyEnd}
-                theme={theme}
               />
             </View>
 
-            {/* Buttons */}
             <View style={styles.buttonContainer}>
               <Pressable
                 style={[
@@ -176,7 +164,6 @@ export function AddAssetModal({
               <AuthButton
                 title="Add Asset"
                 onPress={handleAdd}
-                theme={theme}
                 isLoading={isLoading}
               />
             </View>

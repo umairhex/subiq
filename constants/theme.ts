@@ -18,6 +18,7 @@ export const Colors = {
     accentForeground: "hsl(224.4, 64.3%, 32.9%)",
     destructive: "hsl(0, 84.2%, 60.2%)",
     destructiveForeground: "hsl(0, 0%, 100%)",
+    warning: "hsl(38, 92%, 50%)",
     border: "hsl(210, 20.0%, 80.0%)",
     input: "hsl(220, 15.8%, 96.3%)",
     ring: "hsl(13.2, 73.0%, 54.9%)",
@@ -45,6 +46,7 @@ export const Colors = {
     accentForeground: "hsl(213.3, 96.9%, 87.3%)",
     destructive: "hsl(0, 84.2%, 60.2%)",
     destructiveForeground: "hsl(0, 0%, 100%)",
+    warning: "hsl(38, 92%, 50%)",
     border: "hsl(224.3, 25.0%, 35.0%)",
     input: "hsl(224.3, 15.9%, 28.4%)",
     ring: "hsl(13.2, 73.0%, 54.9%)",
@@ -58,11 +60,6 @@ export const Colors = {
 };
 
 export const Fonts = Platform.select({
-  ios: {
-    sans: "Inter",
-    serif: "Source Serif 4",
-    mono: "JetBrains Mono",
-  },
   default: {
     sans: "Inter",
     serif: "Source Serif 4",

@@ -1,18 +1,18 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextInputProps,
-  View,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    TextInputProps,
+    View,
 } from "react-native";
 
 interface AuthInputProps extends TextInputProps {
   label: string;
   icon: keyof typeof Ionicons.glyphMap;
-  theme: any;
   showPasswordToggle?: boolean;
   isPasswordVisible?: boolean;
   onTogglePassword?: () => void;
@@ -21,12 +21,12 @@ interface AuthInputProps extends TextInputProps {
 export function AuthInput({
   label,
   icon,
-  theme,
   showPasswordToggle,
   isPasswordVisible,
   onTogglePassword,
   ...props
 }: AuthInputProps) {
+  const { theme } = useAppTheme();
   return (
     <View style={styles.inputGroup}>
       <Text style={[styles.label, { color: theme.foreground }]}>{label}</Text>

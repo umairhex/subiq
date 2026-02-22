@@ -1,18 +1,18 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface SocialAuthButtonsProps {
-  theme: any;
   onGooglePress?: () => void;
   onApplePress?: () => void;
 }
 
 export function SocialAuthButtons({
-  theme,
   onGooglePress,
   onApplePress,
 }: SocialAuthButtonsProps) {
+  const { theme } = useAppTheme();
   return (
     <>
       <View style={styles.dividerContainer}>

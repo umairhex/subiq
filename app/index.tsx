@@ -2,8 +2,7 @@ import { ThemedText } from "@/components/themed-text";
 import { AuthButton } from "@/components/ui/auth-button";
 import { AuthInput } from "@/components/ui/auth-input";
 import { SocialAuthButtons } from "@/components/ui/social-auth-buttons";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
@@ -15,7 +14,6 @@ import {
     RefreshControl,
     ScrollView,
     StyleSheet,
-    useColorScheme,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -24,11 +22,7 @@ type AuthMode = "login" | "signup";
 
 export default function AuthScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
+  const { theme } = useAppTheme();
   const [refreshing, setRefreshing] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("signup");
   const [email, setEmail] = useState("");
@@ -124,7 +118,6 @@ export default function AuthScreen() {
               <AuthInput
                 label="Full Name"
                 icon="person-outline"
-                theme={theme}
                 placeholder="Enter your full name"
                 value={name}
                 onChangeText={setName}
@@ -135,7 +128,6 @@ export default function AuthScreen() {
             <AuthInput
               label="Email Address"
               icon="mail-outline"
-              theme={theme}
               placeholder="example@domain.com"
               value={email}
               onChangeText={setEmail}
@@ -147,7 +139,6 @@ export default function AuthScreen() {
             <AuthInput
               label="Password"
               icon="lock-closed-outline"
-              theme={theme}
               placeholder={
                 authMode === "signup"
                   ? "Create a strong password"
@@ -181,11 +172,10 @@ export default function AuthScreen() {
               title={authMode === "signup" ? "Sign Up" : "Log In"}
               onPress={handleAuth}
               isLoading={isLoading}
-              theme={theme}
             />
           </View>
 
-          <SocialAuthButtons theme={theme} />
+          <SocialAuthButtons />
 
           {authMode === "signup" && (
             <ThemedText

@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -16,10 +17,10 @@ export interface Asset {
 
 interface AssetCardProps {
   asset: Asset;
-  theme: any;
 }
 
-export function AssetCard({ asset, theme }: AssetCardProps) {
+export function AssetCard({ asset }: AssetCardProps) {
+  const { theme } = useAppTheme();
   const isExpiringSoon = asset.status === "Expiring Soon";
   const isOutOfWarranty = asset.status === "Out of Warranty";
 

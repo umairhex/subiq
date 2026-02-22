@@ -1,159 +1,23 @@
-import { AssetLog } from "@/components/assets/asset-log-item";
 import { ExpenseSummary } from "@/components/dashboard/expense-summary";
-import {
-    Recommendation,
-    RecommendationEngine,
-} from "@/components/dashboard/recommendation-engine";
-import {
-    Subscription,
-    SubscriptionCard,
-} from "@/components/dashboard/subscription-card";
-import { SubscriptionLog } from "@/components/dashboard/subscription-log-item";
+import { RecommendationEngine } from "@/components/dashboard/recommendation-engine";
+import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 import { UnifiedLogsSection } from "@/components/dashboard/unified-logs-section";
 import { ThemedText } from "@/components/themed-text";
 import { AddSubscriptionModal } from "@/components/ui/add-subscription-modal";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import {
+    MOCK_ASSET_LOGS,
+    MOCK_RECOMMENDATIONS,
+    MOCK_SUBSCRIPTION_LOGS,
+    MOCK_SUBSCRIPTIONS,
+} from "@/constants/mock-data";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    useColorScheme,
-    View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const MOCK_SUBSCRIPTIONS: Subscription[] = [
-  {
-    id: "1",
-    name: "Netflix",
-    startDate: "2023-01-15",
-    renewalDate: "Mar 15, 2024",
-    billingCycle: "Monthly",
-    price: 15.99,
-    paymentMethod: "Visa **** 4242",
-    status: "Active",
-    daysLeft: 12,
-    icon: "play-circle",
-  },
-  {
-    id: "2",
-    name: "Spotify Premium",
-    startDate: "2023-06-20",
-    renewalDate: "Mar 20, 2024",
-    billingCycle: "Monthly",
-    price: 10.99,
-    paymentMethod: "Mastercard **** 8888",
-    status: "Active",
-    daysLeft: 17,
-    icon: "musical-notes",
-  },
-  {
-    id: "3",
-    name: "Adobe Creative Cloud",
-    startDate: "2024-01-01",
-    renewalDate: "Jan 01, 2025",
-    billingCycle: "Yearly",
-    price: 599.99,
-    paymentMethod: "Apple Pay",
-    status: "Active",
-    daysLeft: 290,
-    icon: "brush",
-  },
-];
-
-const MOCK_RECOMMENDATIONS: Recommendation[] = [
-  {
-    id: "1",
-    type: "Duplicate",
-    title: "Overlapping Streaming Content",
-    description:
-      "You have Netflix and HBO Max. 65% of trending content overlaps between these services.",
-    savings: 14.99,
-    confidence: 92,
-  },
-  {
-    id: "2",
-    type: "Inactive",
-    title: "Unused Software License",
-    description:
-      "Adobe Illustrator hasn't been opened in 45 days. Consider downgrading your plan.",
-    savings: 32.0,
-    confidence: 88,
-  },
-];
-
-const MOCK_ASSET_LOGS: AssetLog[] = [
-  {
-    id: "1",
-    assetName: "MacBook Pro M2",
-    action: "Added",
-    date: "Feb 15, 2024",
-    details: "Added with 1-year warranty",
-  },
-  {
-    id: "2",
-    assetName: "Washing Machine",
-    action: "Warranty Expiring",
-    date: "Feb 10, 2024",
-    details: "Warranty expires in 12 days",
-  },
-  {
-    id: "3",
-    assetName: "PS5 Console",
-    action: "Warranty Expired",
-    date: "Jan 15, 2024",
-    details: "Warranty expired 1 month ago",
-  },
-  {
-    id: "4",
-    assetName: "MacBook Pro M2",
-    action: "Maintenance Due",
-    date: "Jan 20, 2024",
-    details: "Recommended cleaning and software update",
-  },
-];
-
-const MOCK_SUBSCRIPTION_LOGS: SubscriptionLog[] = [
-  {
-    id: "1",
-    subscriptionName: "Netflix",
-    action: "Added",
-    date: "Feb 15, 2024",
-    details: "Monthly subscription added",
-  },
-  {
-    id: "2",
-    subscriptionName: "Spotify Premium",
-    action: "Renewed",
-    date: "Feb 10, 2024",
-    details: "Auto-renewed for $10.99",
-  },
-  {
-    id: "3",
-    subscriptionName: "Adobe Creative Cloud",
-    action: "Price Changed",
-    date: "Jan 20, 2024",
-    details: "Price increased from $599 to $699",
-  },
-  {
-    id: "4",
-    subscriptionName: "Disney+",
-    action: "Cancelled",
-    date: "Jan 15, 2024",
-    details: "Subscription cancelled by user",
-  },
-];
-
 export default function DashboardScreen() {
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
-
+  const { theme } = useAppTheme();
   const [showAddModal, setShowAddModal] = React.useState(false);
 
   const handleAddSubscription = async (subscription: {
@@ -162,10 +26,8 @@ export default function DashboardScreen() {
     billingCycle: "Monthly" | "Yearly";
     paymentMethod: string;
     startDate: string;
-  }) => {
-    // TODO: Implement API call to add subscription
-    console.log("Adding subscription:", subscription);
-    // For now, just show success message
+  }): Promise<void> => {
+    console.log("LOG: Adding subscription:", subscription);
     return new Promise((resolve) => setTimeout(resolve, 1000));
   };
 
@@ -179,32 +41,25 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.contentContainer}
       >
         <View style={styles.userHeader}>
-          <View>
-            <ThemedText
-              type="title"
-              style={[styles.userName, { color: theme.foreground }]}
-            >
-              Dashboard
-            </ThemedText>
-          </View>
+          <ThemedText
+            type="title"
+            style={[styles.userName, { color: theme.foreground }]}
+          >
+            Dashboard
+          </ThemedText>
         </View>
 
         <ExpenseSummary
           totalMonthly={76.97}
           totalYearly={923.64}
           trendPercentage={-4.2}
-          theme={theme}
         />
 
-        <RecommendationEngine
-          recommendations={MOCK_RECOMMENDATIONS}
-          theme={theme}
-        />
+        <RecommendationEngine recommendations={MOCK_RECOMMENDATIONS} />
 
         <UnifiedLogsSection
           assetLogs={MOCK_ASSET_LOGS}
           subscriptionLogs={MOCK_SUBSCRIPTION_LOGS}
-          theme={theme}
         />
 
         <View style={styles.sectionHeader}>
@@ -218,7 +73,7 @@ export default function DashboardScreen() {
 
         <View style={styles.subscriptionList}>
           {MOCK_SUBSCRIPTIONS.map((sub) => (
-            <SubscriptionCard key={sub.id} subscription={sub} theme={theme} />
+            <SubscriptionCard key={sub.id} subscription={sub} />
           ))}
         </View>
       </ScrollView>
@@ -237,7 +92,6 @@ export default function DashboardScreen() {
         visible={showAddModal}
         onClose={() => setShowAddModal(false)}
         onAdd={handleAddSubscription}
-        theme={theme}
       />
     </SafeAreaView>
   );
@@ -255,29 +109,8 @@ const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 16,
   },
-  greeting: {
-    fontSize: 14,
-  },
   userName: {
     fontSize: 24,
-  },
-  notificationBtn: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-  },
-  notificationDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    position: "absolute",
-    top: 12,
-    right: 12,
-    borderWidth: 2,
-    borderColor: "#fff",
   },
   sectionHeader: {
     flexDirection: "row",
@@ -287,23 +120,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-  },
-  seeAll: {
-    fontSize: 14,
-  },
-  sortBar: {
-    marginBottom: 20,
-  },
-  sortScroll: {
-    gap: 8,
-  },
-  sortChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 10,
-  },
-  sortChipText: {
-    fontSize: 13,
   },
   subscriptionList: {
     gap: 12,

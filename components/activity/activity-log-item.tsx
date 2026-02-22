@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -13,10 +14,10 @@ export interface ActivityLog {
 
 interface ActivityLogItemProps {
   log: ActivityLog;
-  theme: any;
 }
 
-export function ActivityLogItem({ log, theme }: ActivityLogItemProps) {
+export function ActivityLogItem({ log }: ActivityLogItemProps) {
+  const { theme } = useAppTheme();
   return (
     <View
       style={[

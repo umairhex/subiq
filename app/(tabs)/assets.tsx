@@ -1,76 +1,27 @@
-import { Asset, AssetCard } from "@/components/assets/asset-card";
+import { AssetCard } from "@/components/assets/asset-card";
 import { ThemedText } from "@/components/themed-text";
+import { AddAssetModal } from "@/components/ui/add-asset-modal";
 import { StatsCard } from "@/components/ui/stats-card";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { MOCK_ASSETS } from "@/constants/mock-data";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AddAssetModal } from "@/components/ui/add-asset-modal";
-
-const MOCK_ASSETS: Asset[] = [
-  {
-    id: "1",
-    name: "MacBook Pro M2",
-    brand: "Apple",
-    purchaseDate: "Oct 12, 2023",
-    warrantyStart: "Oct 12, 2023",
-    warrantyEnd: "Oct 12, 2024",
-    hasInvoice: true,
-    reminderEnabled: true,
-    status: "In Warranty",
-  },
-  {
-    id: "2",
-    name: "Washing Machine",
-    brand: "Samsung",
-    purchaseDate: "Mar 10, 2022",
-    warrantyStart: "Mar 10, 2022",
-    warrantyEnd: "Mar 10, 2024",
-    hasInvoice: false,
-    reminderEnabled: true,
-    status: "Expiring Soon",
-  },
-  {
-    id: "3",
-    name: "PS5 Console",
-    brand: "Sony",
-    purchaseDate: "Nov 15, 2021",
-    warrantyStart: "Nov 15, 2021",
-    warrantyEnd: "Nov 15, 2022",
-    hasInvoice: true,
-    reminderEnabled: false,
-    status: "Out of Warranty",
-  },
-];
-
 export default function AssetsScreen() {
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
+  const { theme } = useAppTheme();
 
   const [showAddModal, setShowAddModal] = React.useState(false);
 
-  const handleAddAsset = async (asset: {
+  const handleAddAsset = (asset: {
     name: string;
     brand: string;
     purchaseDate: string;
     warrantyEnd: string;
-  }) => {
-    // TODO: Implement API call to add asset
-    console.log("Adding asset:", asset);
-    // For now, just show success message
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+  }): Promise<void> => {
+    console.log("LOG: Adding asset:", asset);
+    return new Promise<void>((resolve) => setTimeout(resolve, 1000));
   };
 
   return (
@@ -116,7 +67,6 @@ export default function AssetsScreen() {
               value: "8 Active",
             },
           ]}
-          theme={theme}
         />
 
         <View style={[styles.searchBar, { backgroundColor: theme.input }]}>
@@ -140,7 +90,7 @@ export default function AssetsScreen() {
 
         <View style={styles.assetsList}>
           {MOCK_ASSETS.map((asset) => (
-            <AssetCard key={asset.id} asset={asset} theme={theme} />
+            <AssetCard key={asset.id} asset={asset} />
           ))}
         </View>
       </ScrollView>
@@ -149,7 +99,6 @@ export default function AssetsScreen() {
         visible={showAddModal}
         onClose={() => setShowAddModal(false)}
         onAdd={handleAddAsset}
-        theme={theme}
       />
     </SafeAreaView>
   );

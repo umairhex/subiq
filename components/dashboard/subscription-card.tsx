@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useCurrencyStore } from "@/stores/currency-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
@@ -18,27 +19,24 @@ export interface Subscription {
 
 interface SubscriptionCardProps {
   subscription: Subscription;
-  theme: any;
 }
 
-export function SubscriptionCard({
-  subscription,
-  theme,
-}: SubscriptionCardProps) {
+export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
+  const { theme } = useAppTheme();
+  const { currency } = useCurrencyStore();
+
   const getStatusColor = () => {
     switch (subscription.status) {
       case "Active":
         return theme.primary;
       case "Trial":
-        return "#FFAB00";
+        return theme.warning;
       case "Cancelled":
         return theme.mutedForeground;
       default:
         return theme.primary;
     }
   };
-
-  const { currency } = useCurrencyStore();
 
   return (
     <View

@@ -6,22 +6,16 @@ import {
     Platform,
     SafeAreaView,
     ScrollView,
-    useColorScheme,
     View,
 } from "react-native";
 
 import { ThemedText } from "@/components/themed-text";
 import { AuthButton } from "@/components/ui/auth-button";
 import { AuthInput } from "@/components/ui/auth-input";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { useAppTheme } from "@/hooks/use-app-theme";
 
 export default function EditProfileScreen() {
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
+  const { theme } = useAppTheme();
 
   const [firstName, setFirstName] = useState("John");
   const [lastName, setLastName] = useState("Doe");
@@ -83,7 +77,6 @@ export default function EditProfileScreen() {
                 onChangeText={setFirstName}
                 autoCapitalize="words"
                 autoComplete="given-name"
-                theme={theme}
               />
 
               <AuthInput
@@ -94,16 +87,11 @@ export default function EditProfileScreen() {
                 onChangeText={setLastName}
                 autoCapitalize="words"
                 autoComplete="family-name"
-                theme={theme}
               />
             </View>
 
             <View style={{ marginTop: 40 }}>
-              <AuthButton
-                title="Save Changes"
-                onPress={handleSave}
-                theme={theme}
-              />
+              <AuthButton title="Save Changes" onPress={handleSave} />
             </View>
           </View>
         </ScrollView>

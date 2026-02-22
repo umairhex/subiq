@@ -1,4 +1,5 @@
 import { ThemedText } from "@/components/themed-text";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import {
     CURRENCIES,
     Currency,
@@ -11,14 +12,10 @@ import { Modal, Pressable, ScrollView, StyleSheet, View } from "react-native";
 interface CurrencySelectorProps {
   visible: boolean;
   onClose: () => void;
-  theme: any;
 }
 
-export function CurrencySelector({
-  visible,
-  onClose,
-  theme,
-}: CurrencySelectorProps) {
+export function CurrencySelector({ visible, onClose }: CurrencySelectorProps) {
+  const { theme } = useAppTheme();
   const { currency, setCurrency } = useCurrencyStore();
 
   const handleCurrencySelect = (selectedCurrency: Currency) => {

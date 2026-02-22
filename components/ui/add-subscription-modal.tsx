@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import React, { useState } from "react";
 import {
     Alert,
@@ -22,16 +23,15 @@ interface AddSubscriptionModalProps {
     billingCycle: "Monthly" | "Yearly";
     paymentMethod: string;
     startDate: string;
-  }) => void;
-  theme: any;
+  }) => Promise<void>;
 }
 
 export function AddSubscriptionModal({
   visible,
   onClose,
   onAdd,
-  theme,
 }: AddSubscriptionModalProps) {
+  const { theme } = useAppTheme();
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [billingCycle, setBillingCycle] = useState<"Monthly" | "Yearly">(
@@ -40,6 +40,14 @@ export function AddSubscriptionModal({
   const [paymentMethod, setPaymentMethod] = useState("");
   const [startDate, setStartDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const resetForm = () => {
+    setName("");
+    setPrice("");
+    setBillingCycle("Monthly");
+    setPaymentMethod("");
+    setStartDate("");
+  };
 
   const handleAdd = async () => {
     if (
@@ -67,15 +75,9 @@ export function AddSubscriptionModal({
         paymentMethod: paymentMethod.trim(),
         startDate: startDate.trim(),
       });
-
-      // Reset form
-      setName("");
-      setPrice("");
-      setBillingCycle("Monthly");
-      setPaymentMethod("");
-      setStartDate("");
+      resetForm();
       onClose();
-    } catch (_error) {
+    } catch {
       Alert.alert("Error", "Failed to add subscription");
     } finally {
       setIsLoading(false);
@@ -84,11 +86,7 @@ export function AddSubscriptionModal({
 
   const handleClose = () => {
     if (!isLoading) {
-      setName("");
-      setPrice("");
-      setBillingCycle("Monthly");
-      setPaymentMethod("");
-      setStartDate("");
+      resetForm();
       onClose();
     }
   };
@@ -131,7 +129,6 @@ export function AddSubscriptionModal({
                 placeholder="e.g., Netflix, Spotify"
                 value={name}
                 onChangeText={setName}
-                theme={theme}
                 autoCapitalize="words"
               />
 
@@ -141,7 +138,6 @@ export function AddSubscriptionModal({
                 placeholder="e.g., 15.99"
                 value={price}
                 onChangeText={setPrice}
-                theme={theme}
                 keyboardType="decimal-pad"
               />
 
@@ -218,7 +214,6 @@ export function AddSubscriptionModal({
                 placeholder="e.g., Visa **** 4242"
                 value={paymentMethod}
                 onChangeText={setPaymentMethod}
-                theme={theme}
                 autoCapitalize="words"
               />
 
@@ -228,7 +223,6 @@ export function AddSubscriptionModal({
                 placeholder="e.g., Jan 15, 2024"
                 value={startDate}
                 onChangeText={setStartDate}
-                theme={theme}
                 autoCapitalize="words"
               />
             </View>
@@ -257,7 +251,6 @@ export function AddSubscriptionModal({
               <AuthButton
                 title="Add Subscription"
                 onPress={handleAdd}
-                theme={theme}
                 isLoading={isLoading}
               />
             </View>

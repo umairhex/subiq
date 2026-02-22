@@ -1,75 +1,28 @@
-import {
-  ActivityLog,
-  ActivityLogItem,
-} from "@/components/activity/activity-log-item";
+import { ActivityLogItem } from "@/components/activity/activity-log-item";
 import { ThemedText } from "@/components/themed-text";
+import { AddActivityModal } from "@/components/ui/add-activity-modal";
 import { StatsCard } from "@/components/ui/stats-card";
-import { Colors } from "@/constants/theme";
+import { MOCK_ACTIVITY } from "@/constants/mock-data";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useCurrencyStore } from "@/stores/currency-store";
-import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { AddActivityModal } from "@/components/ui/add-activity-modal";
-
-const MOCK_ACTIVITY: ActivityLog[] = [
-  {
-    id: "1",
-    platform: "Netflix",
-    activityName: "Watched 'Dune: Part Two'",
-    date: "Today, 8:45 PM",
-    duration: "2h 46m",
-  },
-  {
-    id: "2",
-    platform: "Spotify",
-    activityName: "Listening to 'Techno Bunker'",
-    date: "Today, 10:30 AM",
-    duration: "45m",
-  },
-  {
-    id: "3",
-    platform: "Adobe Photoshop",
-    activityName: "Project: Logo Design",
-    date: "Yesterday",
-    duration: "3h 15m",
-  },
-  {
-    id: "4",
-    platform: "Netflix",
-    activityName: "Watched 'The Gentlemen'",
-    date: "March 18, 2024",
-    duration: "52m",
-  },
-];
-
 export default function ActivityScreen() {
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
+  const { theme } = useAppTheme();
   const { currency } = useCurrencyStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
 
   const [showAddModal, setShowAddModal] = React.useState(false);
 
-  const handleAddActivity = async (activity: {
+  const handleAddActivity = (activity: {
     platform: string;
     activityName: string;
     duration: string;
-  }) => {
-    // TODO: Implement API call to add activity
-    console.log("Adding activity:", activity);
-    // For now, just show success message
-    return new Promise((resolve) => setTimeout(resolve, 1000));
+  }): Promise<void> => {
+    console.log("LOG: Adding activity:", activity);
+    return new Promise<void>((resolve) => setTimeout(resolve, 1000));
   };
 
   return (
@@ -118,7 +71,6 @@ export default function ActivityScreen() {
               trend: "vs 22h last week",
             },
           ]}
-          theme={theme}
         />
 
         <View
@@ -194,7 +146,7 @@ export default function ActivityScreen() {
 
         <View style={styles.listContainer}>
           {MOCK_ACTIVITY.map((log) => (
-            <ActivityLogItem key={log.id} log={log} theme={theme} />
+            <ActivityLogItem key={log.id} log={log} />
           ))}
         </View>
       </ScrollView>
@@ -203,7 +155,6 @@ export default function ActivityScreen() {
         visible={showAddModal}
         onClose={() => setShowAddModal(false)}
         onAdd={handleAddActivity}
-        theme={theme}
       />
     </SafeAreaView>
   );

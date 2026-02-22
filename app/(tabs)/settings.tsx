@@ -1,29 +1,20 @@
 import { CurrencySelector } from "@/components/settings/currency-selector";
 import { SettingsItem } from "@/components/settings/settings-item";
 import { ThemedText } from "@/components/themed-text";
-import { Colors } from "@/constants/theme";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useCurrencyStore } from "@/stores/currency-store";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
-} from "react-native";
+import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme() ?? "light";
+  const { theme } = useAppTheme();
   const { theme: overrideTheme, setTheme } = useThemeStore();
   const { currency } = useCurrencyStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
 
   const [showCurrencySelector, setShowCurrencySelector] = useState(false);
 
@@ -155,14 +146,12 @@ export default function SettingsScreen() {
               title="Currency"
               subtitle={`${currency.code} (${currency.symbol})`}
               onPress={() => setShowCurrencySelector(true)}
-              theme={theme}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
               icon="notifications-outline"
               title="Notifications"
               subtitle="On"
-              theme={theme}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
@@ -170,7 +159,6 @@ export default function SettingsScreen() {
               title="Dark Mode"
               subtitle={getThemeSubtitle()}
               onPress={toggleTheme}
-              theme={theme}
             />
           </View>
         </View>
@@ -188,23 +176,17 @@ export default function SettingsScreen() {
               { backgroundColor: theme.card, borderColor: theme.border },
             ]}
           >
-            <SettingsItem
-              icon="download-outline"
-              title="Export Data"
-              theme={theme}
-            />
+            <SettingsItem icon="download-outline" title="Export Data" />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
               icon="shield-checkmark-outline"
               title="Privacy Policy"
-              theme={theme}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
               icon="key-outline"
               title="Change Password"
               onPress={() => router.push("/change-password")}
-              theme={theme}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
             <SettingsItem
@@ -212,7 +194,6 @@ export default function SettingsScreen() {
               title="Forgot Password"
               subtitle="Reset your password"
               onPress={() => router.push("/forgot-password")}
-              theme={theme}
             />
           </View>
         </View>
@@ -239,7 +220,6 @@ export default function SettingsScreen() {
         <CurrencySelector
           visible={showCurrencySelector}
           onClose={() => setShowCurrencySelector(false)}
-          theme={theme}
         />
       </ScrollView>
     </SafeAreaView>

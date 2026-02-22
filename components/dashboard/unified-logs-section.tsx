@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { AssetLog, AssetLogItem } from "../assets/asset-log-item";
 import { SubscriptionLog, SubscriptionLogItem } from "./subscription-log-item";
 
@@ -10,14 +11,13 @@ type LogType = "all" | "assets" | "subscriptions";
 interface UnifiedLogsSectionProps {
   assetLogs: AssetLog[];
   subscriptionLogs: SubscriptionLog[];
-  theme: any;
 }
 
 export function UnifiedLogsSection({
   assetLogs,
   subscriptionLogs,
-  theme,
 }: UnifiedLogsSectionProps) {
+  const { theme } = useAppTheme();
   const [activeFilter, setActiveFilter] = useState<LogType>("all");
 
   const getFilteredLogs = () => {
@@ -50,15 +50,9 @@ export function UnifiedLogsSection({
 
   const renderLogItem = (log: any) => {
     if (log.type === "asset") {
-      return <AssetLogItem key={`asset-${log.id}`} log={log} theme={theme} />;
+      return <AssetLogItem key={`asset-${log.id}`} log={log} />;
     } else {
-      return (
-        <SubscriptionLogItem
-          key={`subscription-${log.id}`}
-          log={log}
-          theme={theme}
-        />
-      );
+      return <SubscriptionLogItem key={`subscription-${log.id}`} log={log} />;
     }
   };
 
@@ -73,7 +67,6 @@ export function UnifiedLogsSection({
         </ThemedText>
       </View>
 
-      {/* Filter Tabs */}
       <View style={styles.filterContainer}>
         {[
           { key: "all", label: "All" },
@@ -110,7 +103,6 @@ export function UnifiedLogsSection({
         ))}
       </View>
 
-      {/* Logs Container with Scroll */}
       <View style={[styles.logsContainer, { borderColor: theme.border }]}>
         <ScrollView
           showsVerticalScrollIndicator={true}

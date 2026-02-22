@@ -1,3 +1,4 @@
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { useCurrencyStore } from "@/stores/currency-store";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
@@ -29,13 +30,12 @@ export interface Recommendation {
 
 interface RecommendationEngineProps {
   recommendations: Recommendation[];
-  theme: any;
 }
 
 export function RecommendationEngine({
   recommendations,
-  theme,
 }: RecommendationEngineProps) {
+  const { theme } = useAppTheme();
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const { currency } = useCurrencyStore();
 
@@ -53,7 +53,7 @@ export function RecommendationEngine({
       case "Inactive":
         return theme.mutedForeground;
       case "Trial":
-        return "#FFAB00";
+        return theme.warning;
       default:
         return theme.primary;
     }

@@ -1,8 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { AuthButton } from "@/components/ui/auth-button";
 import { AuthInput } from "@/components/ui/auth-input";
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -13,18 +12,13 @@ import {
     Pressable,
     ScrollView,
     StyleSheet,
-    useColorScheme,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ForgotPasswordScreen() {
   const router = useRouter();
-  const colorScheme = useColorScheme() ?? "light";
-  const { theme: overrideTheme } = useThemeStore();
-  const effectiveColorScheme =
-    overrideTheme === "system" ? colorScheme : overrideTheme;
-  const theme = Colors[effectiveColorScheme];
+  const { theme } = useAppTheme();
 
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -140,11 +134,7 @@ export default function ForgotPasswordScreen() {
               </View>
 
               <View style={styles.buttonContainer}>
-                <AuthButton
-                  title="Back to Login"
-                  onPress={handleBackToLogin}
-                  theme={theme}
-                />
+                <AuthButton title="Back to Login" onPress={handleBackToLogin} />
               </View>
 
               <Pressable
@@ -222,7 +212,6 @@ export default function ForgotPasswordScreen() {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
-                theme={theme}
               />
 
               <View style={styles.buttonContainer}>
@@ -230,7 +219,6 @@ export default function ForgotPasswordScreen() {
                   title="Send Reset Link"
                   onPress={handleResetPassword}
                   isLoading={isLoading}
-                  theme={theme}
                 />
               </View>
             </View>

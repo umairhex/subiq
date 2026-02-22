@@ -1,15 +1,11 @@
-import { Colors } from "@/constants/theme";
-import { useThemeStore } from "@/stores/theme-store";
+import { useAppTheme } from "@/hooks/use-app-theme";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Platform, useColorScheme } from "react-native";
+import { Platform } from "react-native";
 
 export default function TabLayout() {
-  const systemColorScheme = useColorScheme() ?? "light";
-  const { theme: appTheme } = useThemeStore();
-  const colorScheme = appTheme === "system" ? systemColorScheme : appTheme;
-  const theme = Colors[colorScheme];
+  const { theme } = useAppTheme();
 
   return (
     <Tabs
