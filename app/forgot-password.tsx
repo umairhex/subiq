@@ -8,12 +8,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -97,11 +97,7 @@ export default function ForgotPasswordScreen() {
                   { backgroundColor: theme.primary + '20' },
                 ]}
               >
-                <Ionicons
-                  name="checkmark-circle"
-                  size={64}
-                  color={theme.primary}
-                />
+                <Ionicons name="checkmark-circle" size={64} color={'#ffff'} />
               </View>
 
               <ThemedText
@@ -205,7 +201,7 @@ export default function ForgotPasswordScreen() {
                 { backgroundColor: theme.primary + '20' },
               ]}
             >
-              <Ionicons name="lock-closed" size={48} color={theme.primary} />
+              <Ionicons name="lock-closed" size={48} color={'#fff'} />
             </View>
 
             <ThemedText

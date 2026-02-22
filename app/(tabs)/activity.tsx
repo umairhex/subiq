@@ -176,11 +176,13 @@ export default function ActivityScreen() {
                 This Month
               </ThemedText>
               <ThemedText
-                type="title"
-                style={[styles.metricValue, { color: theme.foreground }]}
+                type="defaultSemiBold"
+                style={[
+                  styles.metricValue,
+                  { color: theme.foreground, fontFamily: 'Inter-Bold' },
+                ]}
               >
-                {currency.symbol}
-                {costInsight.monthlySpend.toFixed(2)}
+                {currency.symbol} {costInsight.monthlySpend.toFixed(2)}
               </ThemedText>
             </View>
 
@@ -196,11 +198,13 @@ export default function ActivityScreen() {
                 Avg. per Use
               </ThemedText>
               <ThemedText
-                type="title"
-                style={[styles.metricValue, { color: theme.foreground }]}
+                type="defaultSemiBold"
+                style={[
+                  styles.metricValue,
+                  { color: theme.foreground, fontFamily: 'Inter-Bold' },
+                ]}
               >
-                {currency.symbol}
-                {costInsight.costPerUse.toFixed(2)}
+                {currency.symbol} {costInsight.costPerUse.toFixed(2)}
               </ThemedText>
             </View>
           </View>

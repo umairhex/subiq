@@ -54,13 +54,13 @@ export function AuthErrorBanner({ message, onDismiss }: AuthErrorBannerProps) {
           color={theme.destructive}
           style={styles.icon}
         />
-        <Text style={[styles.message, { color: theme.destructive }]}>
+        <Text style={[styles.message, { color: theme.foreground }]}>
           {message}
         </Text>
       </View>
       {onDismiss && (
         <Pressable onPress={onDismiss} hitSlop={8}>
-          <Ionicons name="close" size={18} color={theme.destructive} />
+          <Ionicons name="close" size={18} color={theme.foreground} />
         </Pressable>
       )}
     </Animated.View>

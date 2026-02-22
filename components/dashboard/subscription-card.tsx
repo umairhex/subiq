@@ -19,9 +19,15 @@ export interface Subscription {
 
 interface SubscriptionCardProps {
   subscription: Subscription;
+  onEdit?: (subscription: Subscription) => void;
+  onDelete?: (subscriptionId: string) => void;
 }
 
-export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
+export function SubscriptionCard({
+  subscription,
+  onEdit,
+  onDelete,
+}: SubscriptionCardProps) {
   const { theme } = useAppTheme();
   const { currency } = useCurrencyStore();
 
@@ -68,10 +74,33 @@ export function SubscriptionCard({ subscription }: SubscriptionCardProps) {
             </Text>
           </View>
         </View>
-        <Text style={[styles.price, { color: theme.foreground }]}>
-          {currency.symbol}
-          {subscription.price.toFixed(2)}
-        </Text>
+        <View style={styles.topRowRight}>
+          <Text style={[styles.price, { color: theme.foreground }]}>
+            {currency.symbol} {subscription.price.toFixed(2)}
+          </Text>
+          {(onEdit || onDelete) && (
+            <View style={styles.actionButtons}>
+              {onEdit && (
+                <Ionicons
+                  name="pencil"
+                  size={20}
+                  color={theme.mutedForeground}
+                  onPress={() => onEdit(subscription)}
+                  style={styles.actionButton}
+                />
+              )}
+              {onDelete && (
+                <Ionicons
+                  name="trash"
+                  size={20}
+                  color={theme.destructive}
+                  onPress={() => onDelete(subscription.id)}
+                  style={styles.actionButton}
+                />
+              )}
+            </View>
+          )}
+        </View>
       </View>
 
       <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -202,5 +231,16 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: 'Inter',
     fontStyle: 'italic',
+  },
+  topRowRight: {
+    alignItems: 'flex-end',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 4,
+  },
+  actionButton: {
+    padding: 4,
   },
 });

@@ -7,12 +7,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { toast } from 'sonner-native';
@@ -112,7 +112,7 @@ export default function ChangePasswordScreen() {
                 { backgroundColor: theme.primary + '20' },
               ]}
             >
-              <Ionicons name="key" size={48} color={theme.primary} />
+              <Ionicons name="key" size={48} color={'#ffff'} />
             </View>
 
             <ThemedText

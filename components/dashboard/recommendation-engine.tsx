@@ -3,14 +3,14 @@ import { useCurrencyStore } from '@/stores/currency-store';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    ActivityIndicator,
-    LayoutAnimation,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    UIManager,
-    View,
+  ActivityIndicator,
+  LayoutAnimation,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  UIManager,
+  View,
 } from 'react-native';
 
 if (
@@ -210,8 +210,7 @@ export function RecommendationEngine({
                       <Text
                         style={[styles.saveAmount, { color: theme.primary }]}
                       >
-                        {currency.symbol}
-                        {rec.savings}/mo
+                        {currency.symbol} {rec.savings}/mo
                       </Text>
                     </View>
                     <Pressable

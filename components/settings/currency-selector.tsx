@@ -83,11 +83,7 @@ export function CurrencySelector({ visible, onClose }: CurrencySelectorProps) {
                 </View>
               </View>
               {currency.code === curr.code && (
-                <Ionicons
-                  name="checkmark-circle"
-                  size={24}
-                  color={theme.primary}
-                />
+                <Ionicons name="checkmark-circle" size={24} color={'#4ade80'} />
               )}
             </Pressable>
           ))}

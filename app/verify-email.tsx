@@ -50,28 +50,50 @@ export default function VerifyEmailScreen() {
     >
       <View style={styles.content}>
         <View
-          style={[styles.iconCircle, { backgroundColor: theme.primary + '15' }]}
+          style={[
+            styles.iconCircle,
+            {
+              backgroundColor: theme.primary + '20',
+              borderColor: theme.primary + '30',
+            },
+          ]}
         >
-          <Ionicons name="mail-outline" size={48} color={theme.primary} />
+          <Ionicons
+            name="mail-outline"
+            size={48}
+            color={'#fff'}
+            style={styles.icon}
+          />
         </View>
 
         <ThemedText
           type="title"
           style={[styles.title, { color: theme.foreground }]}
         >
-          Check Your Email
+          Confirm your signup
         </ThemedText>
 
         <ThemedText
           type="default"
           style={[styles.subtitle, { color: theme.mutedForeground }]}
         >
-          We&apos;ve sent a verification link to
+          Follow this link to confirm your user:
         </ThemedText>
 
         <ThemedText
           type="defaultSemiBold"
-          style={[styles.email, { color: theme.foreground }]}
+          style={[
+            styles.email,
+            {
+              color: theme.foreground,
+              backgroundColor: theme.card,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: theme.border,
+            },
+          ]}
         >
           {email || 'your email address'}
         </ThemedText>
@@ -80,8 +102,8 @@ export default function VerifyEmailScreen() {
           type="default"
           style={[styles.description, { color: theme.mutedForeground }]}
         >
-          Please open the link in the email to verify your account. Once
-          verified, you can log in.
+          Check your email and click the confirmation link to complete your
+          signup.
         </ThemedText>
 
         <View style={styles.actions}>
@@ -119,6 +141,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
+    borderWidth: 2,
+  },
+  icon: {
+    zIndex: 1,
+    position: 'relative',
   },
   title: {
     fontSize: 28,
@@ -135,6 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 16,
+    fontWeight: '600',
   },
   description: {
     fontSize: 14,

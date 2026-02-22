@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    View,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
 } from 'react-native';
 import { toast } from 'sonner-native';
 
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { Subscription } from '../dashboard/subscription-card';
 import { ThemedText } from '../themed-text';
 import { AuthInput } from './auth-input';
 import { ModalActionButtons } from './modal-action-buttons';
@@ -24,13 +27,16 @@ interface AddSubscriptionModalProps {
     billingCycle: 'Monthly' | 'Yearly';
     paymentMethod: string;
     startDate: string;
+    icon: string;
   }) => Promise<void>;
+  editingSubscription?: Subscription | null;
 }
 
 export function AddSubscriptionModal({
   visible,
   onClose,
   onAdd,
+  editingSubscription,
 }: AddSubscriptionModalProps) {
   const { theme } = useAppTheme();
   const [name, setName] = useState('');
@@ -39,25 +45,59 @@ export function AddSubscriptionModal({
     'Monthly'
   );
   const [paymentMethod, setPaymentMethod] = useState('');
-  const [startDate, setStartDate] = useState('');
+  const [icon, setIcon] = useState('card-outline');
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+  const [day, setDay] = useState(new Date().getDate());
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (editingSubscription) {
+      setName(editingSubscription.name);
+      setPrice(editingSubscription.price.toString());
+      setBillingCycle(editingSubscription.billingCycle);
+      setPaymentMethod(editingSubscription.paymentMethod);
+      setIcon(editingSubscription.icon);
+
+      const startDate = new Date(editingSubscription.startDate);
+      setYear(startDate.getFullYear());
+      setMonth(startDate.getMonth() + 1);
+      setDay(startDate.getDate());
+    } else {
+      resetForm();
+    }
+  }, [editingSubscription]);
 
   const resetForm = () => {
     setName('');
     setPrice('');
     setBillingCycle('Monthly');
     setPaymentMethod('');
-    setStartDate('');
+    setIcon('card-outline');
+    setYear(new Date().getFullYear());
+    setMonth(new Date().getMonth() + 1);
+    setDay(new Date().getDate());
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
   };
 
   const handleAdd = async () => {
-    if (
-      !name.trim() ||
-      !price.trim() ||
-      !paymentMethod.trim() ||
-      !startDate.trim()
-    ) {
-      toast.warning('Please fill in all fields');
+    if (!name.trim() || !price.trim()) {
+      toast.warning('Please fill in all required fields');
+      return;
+    }
+
+    if (!year || !month || !day) {
+      toast.warning('Please select a valid date');
+      return;
+    }
+
+    const dateObj = new Date(year, month - 1, day);
+    if (isNaN(dateObj.getTime())) {
+      toast.warning('Please enter a valid date');
       return;
     }
 
@@ -69,12 +109,15 @@ export function AddSubscriptionModal({
 
     setIsLoading(true);
     try {
+      const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
       await onAdd({
         name: name.trim(),
         price: price,
         billingCycle,
         paymentMethod: paymentMethod.trim(),
-        startDate: startDate.trim(),
+        startDate: formattedDate,
+        icon,
       });
       resetForm();
       onClose();
@@ -85,10 +128,39 @@ export function AddSubscriptionModal({
     }
   };
 
-  const handleClose = () => {
-    if (!isLoading) {
-      resetForm();
-      onClose();
+  const getDaysInMonth = (year: number, month: number) => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const handleYearChange = (text: string) => {
+    const numValue = parseInt(text);
+    if (!isNaN(numValue) && numValue >= 1900 && numValue <= 2100) {
+      setYear(numValue);
+
+      const maxDays = getDaysInMonth(numValue, month);
+      if (day > maxDays) {
+        setDay(maxDays);
+      }
+    }
+  };
+
+  const handleMonthChange = (text: string) => {
+    const numValue = parseInt(text);
+    if (!isNaN(numValue) && numValue >= 1 && numValue <= 12) {
+      setMonth(numValue);
+
+      const maxDays = getDaysInMonth(year, numValue);
+      if (day > maxDays) {
+        setDay(maxDays);
+      }
+    }
+  };
+
+  const handleDayChange = (text: string) => {
+    const numValue = parseInt(text);
+    const maxDays = getDaysInMonth(year, month);
+    if (!isNaN(numValue) && numValue >= 1 && numValue <= maxDays) {
+      setDay(numValue);
     }
   };
 
@@ -113,7 +185,7 @@ export function AddSubscriptionModal({
                 type="title"
                 style={[styles.title, { color: theme.foreground }]}
               >
-                Add Subscription
+                {editingSubscription ? 'Edit Subscription' : 'Add Subscription'}
               </ThemedText>
               <ThemedText
                 type="default"
@@ -142,7 +214,9 @@ export function AddSubscriptionModal({
                 keyboardType="decimal-pad"
               />
 
-              <View style={styles.billingCycleContainer}>
+              <View
+                style={[styles.billingCycleContainer, { marginBottom: 20 }]}
+              >
                 <ThemedText
                   type="default"
                   style={[styles.label, { color: theme.foreground }]}
@@ -212,26 +286,155 @@ export function AddSubscriptionModal({
               <AuthInput
                 label="Payment Method"
                 icon="card-outline"
-                placeholder="e.g., Visa **** 4242"
+                placeholder="e.g., Visa **** 4242 (optional)"
                 value={paymentMethod}
                 onChangeText={setPaymentMethod}
                 autoCapitalize="words"
               />
 
-              <AuthInput
-                label="Start Date"
-                icon="calendar-outline"
-                placeholder="e.g., Jan 15, 2024"
-                value={startDate}
-                onChangeText={setStartDate}
-                autoCapitalize="words"
-              />
+              <View style={[styles.inputGroup, { marginBottom: 20 }]}>
+                <ThemedText
+                  type="default"
+                  style={[styles.inputLabel, { color: theme.foreground }]}
+                >
+                  Start Date
+                </ThemedText>
+                <View style={styles.dateInputsContainer}>
+                  <View style={styles.dateInputWrapper}>
+                    <ThemedText
+                      type="default"
+                      style={[
+                        styles.dateInputLabel,
+                        { color: theme.mutedForeground },
+                      ]}
+                    >
+                      Year
+                    </ThemedText>
+                    <TextInput
+                      style={[
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.input,
+                          borderColor: theme.border,
+                          color: theme.foreground,
+                        },
+                      ]}
+                      placeholder="2024"
+                      value={year.toString()}
+                      onChangeText={handleYearChange}
+                      keyboardType="number-pad"
+                      placeholderTextColor={theme.mutedForeground}
+                    />
+                  </View>
+                  <View style={styles.dateInputWrapper}>
+                    <ThemedText
+                      type="default"
+                      style={[
+                        styles.dateInputLabel,
+                        { color: theme.mutedForeground },
+                      ]}
+                    >
+                      Month
+                    </ThemedText>
+                    <TextInput
+                      style={[
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.input,
+                          borderColor: theme.border,
+                          color: theme.foreground,
+                        },
+                      ]}
+                      placeholder="01"
+                      value={month.toString().padStart(2, '0')}
+                      onChangeText={handleMonthChange}
+                      keyboardType="number-pad"
+                      placeholderTextColor={theme.mutedForeground}
+                    />
+                  </View>
+                  <View style={styles.dateInputWrapper}>
+                    <ThemedText
+                      type="default"
+                      style={[
+                        styles.dateInputLabel,
+                        { color: theme.mutedForeground },
+                      ]}
+                    >
+                      Day
+                    </ThemedText>
+                    <TextInput
+                      style={[
+                        styles.dateInput,
+                        {
+                          backgroundColor: theme.input,
+                          borderColor: theme.border,
+                          color: theme.foreground,
+                        },
+                      ]}
+                      placeholder="15"
+                      value={day.toString().padStart(2, '0')}
+                      onChangeText={handleDayChange}
+                      keyboardType="number-pad"
+                      placeholderTextColor={theme.mutedForeground}
+                    />
+                  </View>
+                </View>
+              </View>
+
+              <View style={[styles.inputGroup, { marginBottom: 20 }]}>
+                <ThemedText
+                  type="default"
+                  style={[styles.inputLabel, { color: theme.foreground }]}
+                >
+                  Icon
+                </ThemedText>
+                <View style={styles.iconGrid}>
+                  {[
+                    'card-outline',
+                    'tv-outline',
+                    'musical-notes-outline',
+                    'game-controller-outline',
+                    'cloud-outline',
+                    'book-outline',
+                    'fitness-outline',
+                    'cafe-outline',
+                    'newspaper-outline',
+                    'briefcase-outline',
+                    'car-outline',
+                    'home-outline',
+                  ].map((iconName) => (
+                    <Pressable
+                      key={iconName}
+                      style={[
+                        styles.iconOption,
+                        {
+                          backgroundColor:
+                            icon === iconName ? theme.primary : theme.input,
+                          borderColor: theme.border,
+                        },
+                      ]}
+                      onPress={() => setIcon(iconName)}
+                    >
+                      <Ionicons
+                        name={iconName as keyof typeof Ionicons.glyphMap}
+                        size={24}
+                        color={
+                          icon === iconName
+                            ? theme.primaryForeground
+                            : theme.foreground
+                        }
+                      />
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
             </View>
 
             <ModalActionButtons
               onCancel={handleClose}
               onAdd={handleAdd}
               isLoading={isLoading}
+              addButtonTitle={editingSubscription ? 'Update' : 'Add'}
             />
           </ScrollView>
         </View>
@@ -261,7 +464,7 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 1,
-    gap: 20,
+    gap: 0,
   },
   billingCycleContainer: {
     gap: 12,
@@ -286,5 +489,43 @@ const styles = StyleSheet.create({
   cycleButtonText: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  inputGroup: {
+    gap: 8,
+  },
+  inputLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  dateInputsContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  dateInputWrapper: {
+    flex: 1,
+  },
+  dateInputLabel: {
+    fontSize: 12,
+    marginBottom: 4,
+  },
+  dateInput: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    fontSize: 16,
+  },
+  iconGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  iconOption: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

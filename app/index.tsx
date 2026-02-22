@@ -74,9 +74,12 @@ export default function AuthScreen() {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
+
+    setFormError(null);
+    setFieldErrors({});
     setTimeout(() => {
       setRefreshing(false);
-    }, 2000);
+    }, 1000);
   }, []);
 
   const handleAuth = async () => {

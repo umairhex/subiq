@@ -1,3 +1,4 @@
+import { router } from 'expo-router';
 import { toast } from 'sonner-native';
 
 import { supabase } from '@/lib/supabase';
@@ -50,8 +51,11 @@ export function useAuth() {
     if (error) {
       console.log('ERROR: Sign out failed:', error.message);
       toast.error('Sign out failed', { description: error.message });
+    } else {
+      console.log('LOG: Signed out successfully');
+
+      router.replace('/');
     }
-    console.log('LOG: Signed out');
   };
 
   const resetPassword = async (email: string) => {

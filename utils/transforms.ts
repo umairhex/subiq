@@ -33,7 +33,9 @@ export function toSubscription(row: SubscriptionRow): Subscription {
     paymentMethod: row.payment_method,
     status: row.status,
     daysLeft,
-    icon: (row.icon ?? 'card-outline') as Subscription['icon'],
+    icon: (row.icon === 'credit-card'
+      ? 'card-outline'
+      : (row.icon ?? 'card-outline')) as Subscription['icon'],
   };
 }
 

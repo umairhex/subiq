@@ -3,6 +3,15 @@
 -- Run this in Supabase SQL Editor to set up all tables + RLS
 -- =============================================================
 
+-- Drop existing tables in reverse dependency order
+drop table if exists public.recommendations cascade;
+drop table if exists public.asset_logs cascade;
+drop table if exists public.subscription_logs cascade;
+drop table if exists public.activities cascade;
+drop table if exists public.assets cascade;
+drop table if exists public.subscriptions cascade;
+drop table if exists public.profiles cascade;
+
 -- Enable UUID generation
 create extension if not exists "uuid-ossp";
 
@@ -61,7 +70,7 @@ create table if not exists public.subscriptions (
   start_date date not null default current_date,
   renewal_date date,
   status text not null default 'Active' check (status in ('Active', 'Trial', 'Cancelled')),
-  icon text default 'credit-card',
+  icon text default 'card-outline',
   created_at timestamptz default now() not null,
   updated_at timestamptz default now() not null
 );
