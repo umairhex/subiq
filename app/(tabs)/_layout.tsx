@@ -1,11 +1,14 @@
 import { Colors } from "@/constants/theme";
+import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform, useColorScheme } from "react-native";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme() ?? "light";
+  const systemColorScheme = useColorScheme() ?? "light";
+  const { theme: appTheme } = useThemeStore();
+  const colorScheme = appTheme === "system" ? systemColorScheme : appTheme;
   const theme = Colors[colorScheme];
 
   return (
@@ -15,11 +18,13 @@ export default function TabLayout() {
         tabBarInactiveTintColor: theme.mutedForeground,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: theme.background,
+          backgroundColor: theme.card,
           borderTopColor: theme.border,
           height: Platform.OS === "ios" ? 88 : 68,
           paddingBottom: Platform.OS === "ios" ? 30 : 12,
           paddingTop: 12,
+          shadowOpacity: 0,
+          elevation: 0,
         },
         tabBarLabelStyle: {
           fontFamily: "Inter",

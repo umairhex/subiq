@@ -19,8 +19,23 @@ interface ActivityLogItemProps {
 
 export function ActivityLogItem({ log, theme }: ActivityLogItemProps) {
   return (
-    <View style={[styles.container, { borderBottomColor: theme.border }]}>
-      <View style={[styles.iconContainer, { backgroundColor: theme.input }]}>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.card,
+          borderColor: theme.border,
+          shadowColor: theme.foreground,
+          elevation: 2,
+        },
+      ]}
+    >
+      <View
+        style={[
+          styles.iconContainer,
+          { backgroundColor: theme.primary + "20" },
+        ]}
+      >
         <Ionicons name={log.icon} size={20} color={theme.primary} />
       </View>
       <View style={styles.content}>
@@ -55,17 +70,22 @@ export function ActivityLogItem({ log, theme }: ActivityLogItemProps) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    paddingVertical: 16,
-    borderBottomWidth: 1,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    marginBottom: 8,
     alignItems: "center",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
   },
   iconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 16,
+    marginRight: 12,
   },
   content: {
     flex: 1,
@@ -73,7 +93,7 @@ const styles = StyleSheet.create({
   topRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 2,
+    marginBottom: 4,
   },
   platform: {
     fontSize: 12,
@@ -88,7 +108,7 @@ const styles = StyleSheet.create({
   activityName: {
     fontSize: 16,
     fontFamily: "Inter-Bold",
-    marginBottom: 4,
+    marginBottom: 6,
   },
   metaRow: {
     flexDirection: "row",

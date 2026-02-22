@@ -161,6 +161,22 @@ export default function AuthScreen() {
               onTogglePassword={() => setShowPassword(!showPassword)}
             />
 
+            {authMode === "login" && (
+              <View style={styles.forgotPasswordContainer}>
+                <Pressable onPress={() => router.push("/forgot-password")}>
+                  <ThemedText
+                    type="default"
+                    style={[
+                      styles.forgotPasswordText,
+                      { color: theme.primary },
+                    ]}
+                  >
+                    Forgot Password?
+                  </ThemedText>
+                </Pressable>
+              </View>
+            )}
+
             <AuthButton
               title={authMode === "signup" ? "Sign Up" : "Log In"}
               onPress={handleAuth}
@@ -252,6 +268,13 @@ const styles = StyleSheet.create({
   },
   formSection: {
     marginBottom: 32,
+  },
+  forgotPasswordContainer: {
+    alignSelf: "flex-end",
+    marginBottom: 16,
+  },
+  forgotPasswordText: {
+    fontSize: 14,
   },
   termsText: {
     textAlign: "center",

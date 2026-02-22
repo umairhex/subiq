@@ -5,11 +5,11 @@ import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    useColorScheme,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -61,62 +61,87 @@ export default function AssetsScreen() {
       style={{ flex: 1, backgroundColor: theme.background }}
       edges={["top"]}
     >
-      <View style={styles.header}>
-        <ThemedText
-          type="title"
-          style={[styles.title, { color: theme.foreground }]}
-        >
-          My Assets
-        </ThemedText>
-        <Pressable style={[styles.addBtn, { backgroundColor: theme.primary }]}>
-          <Ionicons name="add" size={24} color={theme.primaryForeground} />
-        </Pressable>
-      </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={[styles.summaryCard, { backgroundColor: theme.primary }]}>
-          <View style={styles.summaryItem}>
+        <View style={styles.header}>
+          <View>
             <ThemedText
-              type="default"
-              style={[
-                styles.summaryLabel,
-                { color: theme.primaryForeground, opacity: 0.8 },
-              ]}
+              type="title"
+              style={[styles.title, { color: theme.foreground }]}
             >
-              Total Assets
+              My Assets
             </ThemedText>
             <ThemedText
-              type="subtitle"
-              style={[styles.summaryValue, { color: theme.primaryForeground }]}
+              type="default"
+              style={[styles.subtitle, { color: theme.mutedForeground }]}
             >
-              12 Items
+              Track your warranties and items
             </ThemedText>
           </View>
-          <View
-            style={[
-              styles.summaryDivider,
-              { backgroundColor: theme.primaryForeground },
-            ]}
-          />
-          <View style={styles.summaryItem}>
-            <ThemedText
-              type="default"
-              style={[
-                styles.summaryLabel,
-                { color: theme.primaryForeground, opacity: 0.8 },
-              ]}
-            >
-              In Warranty
-            </ThemedText>
-            <ThemedText
-              type="subtitle"
-              style={[styles.summaryValue, { color: theme.primaryForeground }]}
-            >
-              8 Active
-            </ThemedText>
+          <Pressable
+            style={[styles.addBtn, { backgroundColor: theme.primary }]}
+          >
+            <Ionicons name="add" size={24} color={theme.primaryForeground} />
+          </Pressable>
+        </View>
+
+        <View
+          style={[
+            styles.summaryCard,
+            {
+              backgroundColor: theme.primary + "08",
+              borderColor: theme.primary + "20",
+            },
+          ]}
+        >
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Ionicons name="cube" size={24} color={theme.primary} />
+              <View>
+                <ThemedText
+                  type="default"
+                  style={[
+                    styles.summaryLabel,
+                    { color: theme.mutedForeground },
+                  ]}
+                >
+                  Total Assets
+                </ThemedText>
+                <ThemedText
+                  type="subtitle"
+                  style={[styles.summaryValue, { color: theme.foreground }]}
+                >
+                  12 Items
+                </ThemedText>
+              </View>
+            </View>
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <View style={styles.summaryItem}>
+              <Ionicons
+                name="shield-checkmark"
+                size={24}
+                color={theme.primary}
+              />
+              <View>
+                <ThemedText
+                  type="default"
+                  style={[
+                    styles.summaryLabel,
+                    { color: theme.mutedForeground },
+                  ]}
+                >
+                  In Warranty
+                </ThemedText>
+                <ThemedText
+                  type="subtitle"
+                  style={[styles.summaryValue, { color: theme.foreground }]}
+                >
+                  8 Active
+                </ThemedText>
+              </View>
+            </View>
           </View>
         </View>
 
@@ -130,41 +155,13 @@ export default function AssetsScreen() {
           </ThemedText>
         </View>
 
-        <View style={styles.filterSection}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.filterScroll}
+        <View style={styles.sectionHeader}>
+          <ThemedText
+            type="subtitle"
+            style={[styles.sectionTitle, { color: theme.foreground }]}
           >
-            {["All Items", "Warranty Soon", "Electronics", "Appliances"].map(
-              (label, idx) => (
-                <Pressable
-                  key={label}
-                  style={[
-                    styles.filterChip,
-                    {
-                      backgroundColor: idx === 0 ? theme.primary : theme.input,
-                    },
-                  ]}
-                >
-                  <ThemedText
-                    type="default"
-                    style={[
-                      styles.filterText,
-                      {
-                        color:
-                          idx === 0
-                            ? theme.primaryForeground
-                            : theme.mutedForeground,
-                      },
-                    ]}
-                  >
-                    {label}
-                  </ThemedText>
-                </Pressable>
-              ),
-            )}
-          </ScrollView>
+            All Assets
+          </ThemedText>
         </View>
 
         <View style={styles.assetsList}>
@@ -178,63 +175,76 @@ export default function AssetsScreen() {
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 100,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    marginTop: 20,
-    marginBottom: 24,
+    alignItems: "flex-start",
+    paddingHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,
   },
+  subtitle: {
+    fontSize: 14,
+    marginTop: 4,
+  },
   addBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
+    width: 48,
+    height: 48,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
-  },
-  scrollContent: {
-    paddingBottom: 40,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   summaryCard: {
-    marginHorizontal: 24,
-    padding: 24,
-    borderRadius: 24,
+    padding: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  summaryRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 24,
-    elevation: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
   },
   summaryItem: {
-    flex: 1,
+    flexDirection: "row",
     alignItems: "center",
+    gap: 12,
+    flex: 1,
   },
   summaryLabel: {
     fontSize: 12,
-    marginBottom: 4,
     textTransform: "uppercase",
     letterSpacing: 1,
   },
   summaryValue: {
     fontSize: 20,
+    marginTop: 2,
   },
-  summaryDivider: {
+  divider: {
     width: 1,
     height: 40,
     opacity: 0.3,
   },
   searchBar: {
-    marginHorizontal: 24,
-    height: 56,
-    borderRadius: 16,
+    height: 48,
+    borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -244,22 +254,13 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontSize: 15,
   },
-  filterSection: {
-    marginBottom: 24,
+  sectionHeader: {
+    marginBottom: 16,
   },
-  filterScroll: {
-    paddingHorizontal: 24,
-    gap: 8,
-  },
-  filterChip: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 12,
-  },
-  filterText: {
-    fontSize: 14,
+  sectionTitle: {
+    fontSize: 20,
   },
   assetsList: {
-    paddingHorizontal: 24,
+    gap: 12,
   },
 });

@@ -1,13 +1,14 @@
+import { useCurrencyStore } from "@/stores/currency-store";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
-  LayoutAnimation,
-  Platform,
-  Pressable,
-  StyleSheet,
-  Text,
-  UIManager,
-  View,
+    LayoutAnimation,
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    UIManager,
+    View,
 } from "react-native";
 
 if (
@@ -36,12 +37,26 @@ export function RecommendationEngine({
   theme,
 }: RecommendationEngineProps) {
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const { currency } = useCurrencyStore();
 
   const toggleExpand = (id: string) => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setExpandedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
+  };
+
+  const getTypeColor = (type: string) => {
+    switch (type) {
+      case "Duplicate":
+        return theme.destructive;
+      case "Inactive":
+        return theme.mutedForeground;
+      case "Trial":
+        return "#FFAB00";
+      default:
+        return theme.primary;
+    }
   };
 
   return (
@@ -55,20 +70,29 @@ export function RecommendationEngine({
 
       {recommendations.map((rec) => {
         const isExpanded = expandedIds.includes(rec.id);
+        const typeColor = getTypeColor(rec.type);
         return (
           <Pressable
             key={rec.id}
             onPress={() => toggleExpand(rec.id)}
             style={[
               styles.card,
-              { backgroundColor: theme.card, borderColor: theme.border },
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+                shadowColor: theme.foreground,
+                elevation: 2,
+              },
             ]}
           >
             <View style={styles.badgeRow}>
               <View
-                style={[styles.typeBadge, { backgroundColor: theme.input }]}
+                style={[
+                  styles.typeBadge,
+                  { backgroundColor: typeColor + "20", borderColor: typeColor },
+                ]}
               >
-                <Text style={[styles.typeText, { color: theme.primary }]}>
+                <Text style={[styles.typeText, { color: typeColor }]}>
                   {rec.type}
                 </Text>
               </View>
@@ -120,7 +144,8 @@ export function RecommendationEngine({
                       Potential Savings
                     </Text>
                     <Text style={[styles.saveAmount, { color: theme.primary }]}>
-                      ${rec.savings}/mo
+                      {currency.symbol}
+                      {rec.savings}/mo
                     </Text>
                   </View>
                   <Pressable
@@ -150,38 +175,42 @@ export function RecommendationEngine({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 32,
+    marginBottom: 24,
   },
   header: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   title: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Inter-Bold",
   },
   card: {
     padding: 16,
     borderRadius: 20,
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
   },
   badgeRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   rightHeader: {
     flexDirection: "row",
     alignItems: "center",
   },
   typeBadge: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: 6,
+    borderWidth: 1,
   },
   typeText: {
     fontSize: 12,
@@ -201,17 +230,17 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Bold",
   },
   recTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Inter-Bold",
   },
   expandedContent: {
-    marginTop: 12,
+    marginTop: 8,
   },
   recDesc: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: "Inter",
-    lineHeight: 20,
-    marginBottom: 16,
+    lineHeight: 18,
+    marginBottom: 12,
   },
   footer: {
     flexDirection: "row",
@@ -223,16 +252,16 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
   },
   saveAmount: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: "Inter-Bold",
   },
   actionBtn: {
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
   },
   actionText: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: "Inter-Bold",
   },
 });

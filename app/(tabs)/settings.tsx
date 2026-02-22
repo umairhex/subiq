@@ -1,10 +1,12 @@
+import { CurrencySelector } from "@/components/settings/currency-selector";
 import { SettingsItem } from "@/components/settings/settings-item";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from "@/constants/theme";
+import { useCurrencyStore } from "@/stores/currency-store";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -18,9 +20,12 @@ export default function SettingsScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme() ?? "light";
   const { theme: overrideTheme, setTheme } = useThemeStore();
+  const { currency } = useCurrencyStore();
   const effectiveColorScheme =
     overrideTheme === "system" ? colorScheme : overrideTheme;
   const theme = Colors[effectiveColorScheme];
+
+  const [showCurrencySelector, setShowCurrencySelector] = useState(false);
 
   const toggleTheme = async () => {
     const newMode =
@@ -89,40 +94,46 @@ export default function SettingsScreen() {
               { backgroundColor: theme.card, borderColor: theme.border },
             ]}
           >
-            <View style={styles.profileRow}>
-              <View
-                style={[styles.avatarContainer, { borderColor: theme.border }]}
-              >
-                <Ionicons name="person" size={50} color={theme.muted} />
-              </View>
-              <View style={styles.profileInfo}>
-                <ThemedText
-                  type="title"
-                  style={[styles.profileName, { color: theme.foreground }]}
-                >
-                  John Doe
-                </ThemedText>
-                <ThemedText
-                  type="default"
+            <Pressable
+              style={styles.profileHeader}
+              onPress={() => router.push("/edit-profile")}
+            >
+              <View style={styles.profileMain}>
+                <View
                   style={[
-                    styles.profileEmail,
-                    { color: theme.mutedForeground },
+                    styles.avatarContainer,
+                    {
+                      borderColor: theme.border,
+                      backgroundColor: theme.muted + "20",
+                    },
                   ]}
                 >
-                  john.doe@example.com
-                </ThemedText>
+                  <Ionicons name="person" size={32} color={theme.primary} />
+                </View>
+                <View style={styles.profileDetails}>
+                  <ThemedText
+                    type="title"
+                    style={[styles.profileName, { color: theme.foreground }]}
+                  >
+                    John Doe
+                  </ThemedText>
+                  <ThemedText
+                    type="default"
+                    style={[
+                      styles.profileEmail,
+                      { color: theme.mutedForeground },
+                    ]}
+                  >
+                    john.doe@example.com
+                  </ThemedText>
+                </View>
               </View>
-              <Pressable
-                style={[styles.editProfileBtn, { borderColor: theme.border }]}
-              >
-                <ThemedText
-                  type="default"
-                  style={[styles.editProfileText, { color: theme.foreground }]}
-                >
-                  Edit Profile
-                </ThemedText>
-              </Pressable>
-            </View>
+              <Ionicons
+                name="chevron-forward"
+                size={20}
+                color={theme.mutedForeground}
+              />
+            </Pressable>
           </View>
         </View>
 
@@ -142,7 +153,8 @@ export default function SettingsScreen() {
             <SettingsItem
               icon="cash-outline"
               title="Currency"
-              subtitle="USD ($)"
+              subtitle={`${currency.code} (${currency.symbol})`}
+              onPress={() => setShowCurrencySelector(true)}
               theme={theme}
             />
             <View style={[styles.divider, { backgroundColor: theme.border }]} />
@@ -187,6 +199,21 @@ export default function SettingsScreen() {
               title="Privacy Policy"
               theme={theme}
             />
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <SettingsItem
+              icon="key-outline"
+              title="Change Password"
+              onPress={() => router.push("/change-password")}
+              theme={theme}
+            />
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <SettingsItem
+              icon="help-circle-outline"
+              title="Forgot Password"
+              subtitle="Reset your password"
+              onPress={() => router.push("/forgot-password")}
+              theme={theme}
+            />
           </View>
         </View>
 
@@ -207,13 +234,13 @@ export default function SettingsScreen() {
               Logout
             </ThemedText>
           </Pressable>
-          <ThemedText
-            type="default"
-            style={[styles.versionText, { color: theme.mutedForeground }]}
-          >
-            Subiq v1.0.0 (Gold)
-          </ThemedText>
         </View>
+
+        <CurrencySelector
+          visible={showCurrencySelector}
+          onClose={() => setShowCurrencySelector(false)}
+          theme={theme}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -235,33 +262,33 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.02)",
+    overflow: "hidden",
   },
-  profileRow: {
+  profileHeader: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 24,
-    paddingVertical: 16,
-    gap: 12,
+    paddingVertical: 20,
+    borderRadius: 12,
   },
-  profileInfo: {
+  profileMain: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+    gap: 16,
+  },
+  profileDetails: {
     flex: 1,
   },
   profileName: {
-    fontSize: 18,
-    marginBottom: 2,
+    fontSize: 20,
+    fontWeight: "600",
+    marginBottom: 4,
   },
   profileEmail: {
     fontSize: 14,
-  },
-  editProfileBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  editProfileText: {
-    fontSize: 13,
+    opacity: 0.7,
   },
   section: {
     paddingHorizontal: 24,
@@ -296,10 +323,5 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     fontSize: 16,
-  },
-  versionText: {
-    textAlign: "center",
-    fontSize: 12,
-    marginTop: 24,
   },
 });

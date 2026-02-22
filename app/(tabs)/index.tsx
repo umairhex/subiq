@@ -1,11 +1,11 @@
 import { ExpenseSummary } from "@/components/dashboard/expense-summary";
 import {
-  Recommendation,
-  RecommendationEngine,
+    Recommendation,
+    RecommendationEngine,
 } from "@/components/dashboard/recommendation-engine";
 import {
-  Subscription,
-  SubscriptionCard,
+    Subscription,
+    SubscriptionCard,
 } from "@/components/dashboard/subscription-card";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from "@/constants/theme";
@@ -13,11 +13,11 @@ import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    useColorScheme,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -100,33 +100,12 @@ export default function DashboardScreen() {
         <View style={styles.userHeader}>
           <View>
             <ThemedText
-              type="default"
-              style={[styles.greeting, { color: theme.mutedForeground }]}
-            >
-              Good morning,
-            </ThemedText>
-            <ThemedText
               type="title"
               style={[styles.userName, { color: theme.foreground }]}
             >
-              John Doe
+              Dashboard
             </ThemedText>
           </View>
-          <Pressable
-            style={[styles.notificationBtn, { backgroundColor: theme.input }]}
-          >
-            <Ionicons
-              name="notifications-outline"
-              size={24}
-              color={theme.foreground}
-            />
-            <View
-              style={[
-                styles.notificationDot,
-                { backgroundColor: theme.primary },
-              ]}
-            />
-          </Pressable>
         </View>
 
         <ExpenseSummary
@@ -146,53 +125,8 @@ export default function DashboardScreen() {
             type="subtitle"
             style={[styles.sectionTitle, { color: theme.foreground }]}
           >
-            Subscription Logs
+            Subscriptions
           </ThemedText>
-          <Pressable>
-            <ThemedText
-              type="link"
-              style={[styles.seeAll, { color: theme.primary }]}
-            >
-              See All
-            </ThemedText>
-          </Pressable>
-        </View>
-
-        <View style={styles.sortBar}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.sortScroll}
-          >
-            {["All", "Price", "Renewal Date", "Recently Added"].map(
-              (label, idx) => (
-                <Pressable
-                  key={label}
-                  style={[
-                    styles.sortChip,
-                    {
-                      backgroundColor: idx === 0 ? theme.primary : theme.input,
-                    },
-                  ]}
-                >
-                  <ThemedText
-                    type="default"
-                    style={[
-                      styles.sortChipText,
-                      {
-                        color:
-                          idx === 0
-                            ? theme.primaryForeground
-                            : theme.mutedForeground,
-                      },
-                    ]}
-                  >
-                    {label}
-                  </ThemedText>
-                </Pressable>
-              ),
-            )}
-          </ScrollView>
         </View>
 
         <View style={styles.subscriptionList}>
@@ -216,15 +150,15 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 16,
     paddingBottom: 100,
   },
   userHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 20,
-    marginBottom: 24,
+    marginTop: 16,
+    marginBottom: 16,
   },
   greeting: {
     fontSize: 14,
@@ -254,7 +188,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 20,
@@ -277,15 +211,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   subscriptionList: {
-    gap: 16,
+    gap: 12,
   },
   fab: {
     position: "absolute",
     bottom: 24,
     right: 24,
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     alignItems: "center",
     justifyContent: "center",
     elevation: 8,

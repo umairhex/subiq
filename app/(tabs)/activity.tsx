@@ -1,18 +1,19 @@
 import {
-  ActivityLog,
-  ActivityLogItem,
+    ActivityLog,
+    ActivityLogItem,
 } from "@/components/activity/activity-log-item";
 import { ThemedText } from "@/components/themed-text";
 import { Colors } from "@/constants/theme";
+import { useCurrencyStore } from "@/stores/currency-store";
 import { useThemeStore } from "@/stores/theme-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  useColorScheme,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    useColorScheme,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -54,6 +55,7 @@ const MOCK_ACTIVITY: ActivityLog[] = [
 export default function ActivityScreen() {
   const colorScheme = useColorScheme() ?? "light";
   const { theme: overrideTheme } = useThemeStore();
+  const { currency } = useCurrencyStore();
   const effectiveColorScheme =
     overrideTheme === "system" ? colorScheme : overrideTheme;
   const theme = Colors[effectiveColorScheme];
@@ -63,97 +65,105 @@ export default function ActivityScreen() {
       style={{ flex: 1, backgroundColor: theme.background }}
       edges={["top"]}
     >
-      <View style={styles.header}>
-        <ThemedText
-          type="title"
-          style={[styles.title, { color: theme.foreground }]}
-        >
-          Activity Log
-        </ThemedText>
-        <Pressable style={[styles.logBtn, { backgroundColor: theme.primary }]}>
-          <ThemedText
-            type="defaultSemiBold"
-            style={[styles.logBtnText, { color: theme.primaryForeground }]}
-          >
-            + Log Usage
-          </ThemedText>
-        </Pressable>
-      </View>
-
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-        <View style={styles.statsRow}>
-          <View style={[styles.statItem, { backgroundColor: theme.input }]}>
-            <View style={[styles.statIcon, { backgroundColor: theme.primary }]}>
-              <Ionicons
-                name="flash"
-                size={18}
-                color={theme.primaryForeground}
-              />
-            </View>
-            <View>
-              <ThemedText
-                type="default"
-                style={[styles.statLabel, { color: theme.mutedForeground }]}
-              >
-                Most Used
-              </ThemedText>
-              <ThemedText
-                type="subtitle"
-                style={[styles.statValue, { color: theme.foreground }]}
-              >
-                Netflix
-              </ThemedText>
-              <ThemedText
-                type="default"
-                style={[styles.statTrend, { color: theme.primary }]}
-              >
-                +12% this week
-              </ThemedText>
-            </View>
+        <View style={styles.header}>
+          <View>
+            <ThemedText
+              type="title"
+              style={[styles.title, { color: theme.foreground }]}
+            >
+              Activity
+            </ThemedText>
+            <ThemedText
+              type="default"
+              style={[styles.subtitle, { color: theme.mutedForeground }]}
+            >
+              Track your usage and insights
+            </ThemedText>
           </View>
+          <Pressable
+            style={[styles.logBtn, { backgroundColor: theme.primary }]}
+          >
+            <Ionicons name="add" size={20} color={theme.primaryForeground} />
+          </Pressable>
+        </View>
 
-          <View style={[styles.statItem, { backgroundColor: theme.input }]}>
-            <View style={[styles.statIcon, { backgroundColor: theme.accent }]}>
-              <Ionicons name="time" size={18} color={theme.accentForeground} />
+        <View
+          style={[
+            styles.statsCard,
+            {
+              backgroundColor: theme.primary + "08",
+              borderColor: theme.primary + "20",
+            },
+          ]}
+        >
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Ionicons name="flash" size={24} color={theme.primary} />
+              <View>
+                <ThemedText
+                  type="default"
+                  style={[styles.statLabel, { color: theme.mutedForeground }]}
+                >
+                  Most Used
+                </ThemedText>
+                <ThemedText
+                  type="subtitle"
+                  style={[styles.statValue, { color: theme.foreground }]}
+                >
+                  Netflix
+                </ThemedText>
+                <ThemedText
+                  type="default"
+                  style={[styles.statTrend, { color: theme.primary }]}
+                >
+                  +12% this week
+                </ThemedText>
+              </View>
             </View>
-            <View>
-              <ThemedText
-                type="default"
-                style={[styles.statLabel, { color: theme.mutedForeground }]}
-              >
-                Total Time
-              </ThemedText>
-              <ThemedText
-                type="subtitle"
-                style={[styles.statValue, { color: theme.foreground }]}
-              >
-                24.5h
-              </ThemedText>
-              <ThemedText
-                type="default"
-                style={[styles.statTrend, { color: theme.mutedForeground }]}
-              >
-                vs 22h last week
-              </ThemedText>
+            <View style={[styles.divider, { backgroundColor: theme.border }]} />
+            <View style={styles.statItem}>
+              <Ionicons name="time" size={24} color={theme.primary} />
+              <View>
+                <ThemedText
+                  type="default"
+                  style={[styles.statLabel, { color: theme.mutedForeground }]}
+                >
+                  Total Time
+                </ThemedText>
+                <ThemedText
+                  type="subtitle"
+                  style={[styles.statValue, { color: theme.foreground }]}
+                >
+                  24.5h
+                </ThemedText>
+                <ThemedText
+                  type="default"
+                  style={[styles.statTrend, { color: theme.mutedForeground }]}
+                >
+                  vs 22h last week
+                </ThemedText>
+              </View>
             </View>
           </View>
         </View>
 
-        <View style={styles.intelligenceCard}>
+        <View
+          style={[
+            styles.intelligenceCard,
+            { backgroundColor: theme.card, borderColor: theme.border },
+          ]}
+        >
           <View
             style={[
               styles.intelligenceIcon,
-              { backgroundColor: theme.primary },
+              { backgroundColor: theme.primary + "20" },
             ]}
           >
-            <Ionicons
-              name="analytics"
-              size={24}
-              color={theme.primaryForeground}
-            />
+            <Ionicons name="analytics" size={24} color={theme.primary} />
           </View>
           <View style={{ flex: 1 }}>
             <ThemedText
@@ -169,19 +179,22 @@ export default function ActivityScreen() {
                 { color: theme.mutedForeground },
               ]}
             >
-              Your cost-per-watch for Netflix is $1.20. You&apos;re getting
-              great value!
+              Your cost-per-watch for Netflix is {currency.symbol}1.20.
+              You&apos;re getting great value!
             </ThemedText>
           </View>
         </View>
 
-        <View style={styles.listContainer}>
+        <View style={styles.sectionHeader}>
           <ThemedText
-            type="default"
-            style={[styles.listHeader, { color: theme.mutedForeground }]}
+            type="subtitle"
+            style={[styles.sectionTitle, { color: theme.foreground }]}
           >
-            RECENT ACTIVITY
+            Recent Activity
           </ThemedText>
+        </View>
+
+        <View style={styles.listContainer}>
           {MOCK_ACTIVITY.map((log) => (
             <ActivityLogItem key={log.id} log={log} theme={theme} />
           ))}
@@ -192,72 +205,87 @@ export default function ActivityScreen() {
 }
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 100,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    marginTop: 20,
-    marginBottom: 24,
+    alignItems: "flex-start",
+    paddingHorizontal: 16,
+    marginTop: 16,
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,
   },
-  logBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 12,
-  },
-  logBtnText: {
+  subtitle: {
     fontSize: 14,
+    marginTop: 4,
   },
-  scrollContent: {
-    paddingBottom: 40,
+  logBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  statsCard: {
+    padding: 20,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
   statsRow: {
     flexDirection: "row",
-    paddingHorizontal: 24,
-    gap: 12,
-    marginBottom: 24,
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   statItem: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 20,
     flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 12,
-  },
-  statIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
     alignItems: "center",
-    justifyContent: "center",
+    gap: 12,
+    flex: 1,
   },
   statLabel: {
-    fontSize: 10,
+    fontSize: 12,
     textTransform: "uppercase",
-    marginBottom: 2,
+    letterSpacing: 1,
   },
   statValue: {
-    fontSize: 18,
-  },
-  statTrend: {
-    fontSize: 11,
+    fontSize: 20,
     marginTop: 2,
   },
+  statTrend: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  divider: {
+    width: 1,
+    height: 40,
+    opacity: 0.3,
+  },
   intelligenceCard: {
-    marginHorizontal: 24,
     padding: 20,
-    borderRadius: 24,
-    backgroundColor: "rgba(0,0,0,0.02)",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    marginBottom: 32,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.05)",
+    marginBottom: 24,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
   intelligenceIcon: {
     width: 48,
@@ -267,19 +295,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   intelligenceTitle: {
-    fontSize: 16,
-    marginBottom: 2,
+    fontSize: 18,
+    marginBottom: 4,
   },
   intelligenceDesc: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  sectionHeader: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 20,
   },
   listContainer: {
-    paddingHorizontal: 24,
-  },
-  listHeader: {
-    fontSize: 12,
-    letterSpacing: 1,
-    marginBottom: 16,
+    gap: 8,
   },
 });

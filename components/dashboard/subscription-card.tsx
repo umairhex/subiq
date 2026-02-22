@@ -1,3 +1,4 @@
+import { useCurrencyStore } from "@/stores/currency-store";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -37,11 +38,18 @@ export function SubscriptionCard({
     }
   };
 
+  const { currency } = useCurrencyStore();
+
   return (
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.card, borderColor: theme.border },
+        {
+          backgroundColor: theme.card,
+          borderColor: theme.border,
+          shadowColor: theme.foreground,
+          elevation: 2,
+        },
       ]}
     >
       <View style={styles.topRow}>
@@ -63,7 +71,8 @@ export function SubscriptionCard({
           </View>
         </View>
         <Text style={[styles.price, { color: theme.foreground }]}>
-          ${subscription.price.toFixed(2)}
+          {currency.symbol}
+          {subscription.price.toFixed(2)}
         </Text>
       </View>
 
@@ -105,10 +114,13 @@ export function SubscriptionCard({
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    borderRadius: 20,
+    padding: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
   },
   topRow: {
     flexDirection: "row",
@@ -118,17 +130,17 @@ const styles = StyleSheet.create({
   platformInfo: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 10,
   },
   iconBox: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
+    width: 40,
+    height: 40,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   name: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: "Inter-Bold",
   },
   billing: {
@@ -136,19 +148,19 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
   },
   price: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Inter-Bold",
   },
   divider: {
     height: 1,
-    marginVertical: 12,
+    marginVertical: 8,
     opacity: 0.5,
   },
   detailsRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 8,
   },
   detailLabel: {
     fontSize: 11,
@@ -162,11 +174,13 @@ const styles = StyleSheet.create({
   statusBox: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
-    paddingHorizontal: 10,
+    gap: 4,
+    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 16,
     backgroundColor: "rgba(0,0,0,0.03)",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.1)",
   },
   statusDot: {
     width: 6,

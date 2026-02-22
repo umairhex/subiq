@@ -33,10 +33,18 @@ export function AssetCard({ asset, theme }: AssetCardProps) {
     <View
       style={[
         styles.container,
-        { backgroundColor: theme.card, borderColor: theme.border },
+        {
+          backgroundColor: theme.card,
+          borderColor: theme.border,
+          shadowColor: theme.foreground,
+          elevation: 2,
+        },
       ]}
     >
       <View style={styles.header}>
+        <View style={styles.iconContainer}>
+          <Ionicons name="cube" size={24} color={theme.primary} />
+        </View>
         <View style={styles.info}>
           <Text style={[styles.name, { color: theme.foreground }]}>
             {asset.name}
@@ -45,7 +53,26 @@ export function AssetCard({ asset, theme }: AssetCardProps) {
             {asset.brand}
           </Text>
         </View>
-        <View style={[styles.statusBadge, { backgroundColor: theme.input }]}>
+        <View
+          style={[
+            styles.statusBadge,
+            {
+              backgroundColor: getStatusColor() + "20",
+              borderColor: getStatusColor(),
+            },
+          ]}
+        >
+          <Ionicons
+            name={
+              isOutOfWarranty
+                ? "close-circle"
+                : isExpiringSoon
+                  ? "warning"
+                  : "checkmark-circle"
+            }
+            size={14}
+            color={getStatusColor()}
+          />
           <Text style={[styles.statusText, { color: getStatusColor() }]}>
             {asset.status}
           </Text>
@@ -128,20 +155,32 @@ export function AssetCard({ asset, theme }: AssetCardProps) {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    borderRadius: 20,
+    borderRadius: 16,
     borderWidth: 1,
-    marginBottom: 16,
+    marginBottom: 12,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: "rgba(0,0,0,0.05)",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
   },
   info: {
     flex: 1,
   },
   name: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: "Inter-Bold",
     marginBottom: 2,
   },
@@ -150,9 +189,13 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
   },
   statusBadge: {
-    paddingHorizontal: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 8,
+    borderRadius: 12,
+    borderWidth: 1,
   },
   statusText: {
     fontSize: 12,
@@ -165,7 +208,7 @@ const styles = StyleSheet.create({
   },
   warrantyRow: {
     flexDirection: "row",
-    gap: 24,
+    gap: 16,
     marginBottom: 16,
   },
   dateBox: {
