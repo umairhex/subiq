@@ -100,9 +100,30 @@ export async function generateRecommendations(userId: string): Promise<
       maxOutputTokens: 1024,
     });
 
-    console.log('LOG: AI response received, parsing recommendations');
+    console.log('LOG: AI response received, raw text:', text);
+    let parsed;
+    try {
+      let cleanedText = text.trim();
+      if (cleanedText.startsWith('```json')) {
+        cleanedText = cleanedText.slice(7);
+      } else if (cleanedText.startsWith('```')) {
+        cleanedText = cleanedText.slice(3);
+      }
+      if (cleanedText.endsWith('```')) {
+        cleanedText = cleanedText.slice(0, -3);
+      }
+      cleanedText = cleanedText.trim();
 
-    const parsed = JSON.parse(text);
+      parsed = JSON.parse(cleanedText);
+    } catch (parseError) {
+      console.log('ERROR: Failed to parse AI response as JSON:', text);
+      throw new Error(
+        'AI response JSON parse error: ' +
+          parseError +
+          '\nRaw response: ' +
+          text
+      );
+    }
     const validated = RecommendationsArraySchema.parse(parsed);
     console.log(
       'LOG: Parsed',
@@ -145,7 +166,7 @@ export async function generateAndSaveRecommendations(userId: string) {
     title: rec.title,
     description: rec.description,
     savings: rec.savings,
-    confidence: rec.confidence,
+    confidence: rec.confidence / 100,
   }));
 
   const { data, error } = await supabase

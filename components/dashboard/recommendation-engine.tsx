@@ -177,7 +177,7 @@ export function RecommendationEngine({
                     <Text
                       style={[styles.scoreValue, { color: theme.foreground }]}
                     >
-                      {rec.confidence}%
+                      {(rec.confidence * 100).toFixed(0)}%
                     </Text>
                   </View>
                   <Ionicons
@@ -299,6 +299,8 @@ const styles = StyleSheet.create({
   recTitle: {
     fontSize: 14,
     fontFamily: 'Inter-Bold',
+    flex: 1,
+    marginRight: 8,
   },
   expandedContent: {
     marginTop: 8,

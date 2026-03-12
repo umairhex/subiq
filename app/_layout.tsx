@@ -16,6 +16,7 @@ import {
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { Toaster } from 'sonner-native';
 
@@ -85,29 +86,31 @@ export default function RootLayout() {
   };
 
   return (
-    <AppQueryProvider>
-      <ThemeProvider value={navTheme}>
-        <RootNavigator />
-        <Toaster
-          theme={colorScheme === 'dark' ? 'dark' : 'light'}
-          position="top-center"
-          richColors
-          toastOptions={{
-            style: {
-              backgroundColor: theme.card,
-              borderColor: theme.border,
-            },
-            titleStyle: {
-              color: theme.foreground,
-            },
-            descriptionStyle: {
-              color: theme.mutedForeground,
-            },
-          }}
-        />
-        <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-      </ThemeProvider>
-    </AppQueryProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppQueryProvider>
+        <ThemeProvider value={navTheme}>
+          <RootNavigator />
+          <Toaster
+            theme={colorScheme === 'dark' ? 'dark' : 'light'}
+            position="top-center"
+            richColors
+            toastOptions={{
+              style: {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+              },
+              titleStyle: {
+                color: theme.foreground,
+              },
+              descriptionStyle: {
+                color: theme.mutedForeground,
+              },
+            }}
+          />
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+        </ThemeProvider>
+      </AppQueryProvider>
+    </GestureHandlerRootView>
   );
 }
 
